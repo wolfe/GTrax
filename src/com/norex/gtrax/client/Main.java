@@ -1,0 +1,137 @@
+package com.norex.gtrax.client;
+
+import java.util.ArrayList;
+
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.OpenEvent;
+import com.google.gwt.event.logical.shared.OpenHandler;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.DisclosurePanel;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.norex.gtrax.client.auth.AuthService;
+import com.norex.gtrax.client.auth.AuthServiceAsync;
+import com.norex.gtrax.client.auth.AuthWidget;
+import com.norex.gtrax.client.auth.ClientAuth;
+import com.norex.gtrax.client.auth.ClientCompany;
+import com.norex.gtrax.client.auth.CompanyService;
+import com.norex.gtrax.client.auth.CompanyServiceAsync;
+import com.norex.gtrax.client.auth.CompanyWidget;
+
+public class Main implements ViewInterface {
+	
+	final TextBox name = new TextBox();
+	final Button create = new Button("Create Company");
+	final VerticalPanel p = new VerticalPanel();
+	
+	AuthServiceAsync authService = GWT.create(AuthService.class);
+
+    public VerticalPanel getView() {
+    	final CompanyServiceAsync companyService = GWT.create(CompanyService.class);
+    	
+    	create.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				ClientCompany m = new ClientCompany();
+				m.set("name", name.getValue());
+				companyService.create(m, new AsyncCallback<ClientCompany>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						// TODO Auto-generated method stub
+						
+					}
+
+					@Override
+					public void onSuccess(ClientCompany result) {
+						addToList(result);
+						name.setText(null);
+						name.setFocus(true);
+					}
+				});
+			}
+		});
+    	p.add(name);
+    	p.add(create);
+	
+		companyService.getAll(new AsyncCallback<ArrayList<ClientCompany>>() {
+	
+			@Override
+			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+				
+			}
+	
+			public void onSuccess(ArrayList<ClientCompany> results) {
+				for (ClientCompany m : results) {
+					final CompanyWidget w = addToList(m);
+				}
+			}
+			
+		});
+	
+		return p;
+    }
+    
+    private CompanyWidget addToList(final ClientCompany m) {
+    	final CompanyWidget w = new CompanyWidget(m);
+    	w.addDeleteHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				w.removeFromParent();
+			}
+		});
+    	
+    	HorizontalPanel newUser = new HorizontalPanel();
+    	final TextBox email = new TextBox();
+    	Button add = new Button("add");
+    	w.add(newUser);
+    	
+    	w.add(new Label("Current Members:"));
+    	
+    	for (ClientAuth a : m.getAuthSet()) {
+    		addUserToCompany(w, a);
+    	}
+    	
+    	newUser.add(new Label("Add a new user to this company: "));
+    	newUser.add(email);
+    	newUser.add(add);
+    	add.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				ClientAuth auth = new ClientAuth();
+				auth.setEmail(email.getValue());
+				authService.create(m, auth, new AsyncCallback<ClientAuth>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+					}
+
+					@Override
+					public void onSuccess(ClientAuth result) {
+						addUserToCompany(w, result);
+					}
+				});
+			}
+		});
+    	
+    	p.insert(w, p.getWidgetIndex(name));
+    	
+    	return w;
+    }
+    
+    private void addUserToCompany(CompanyWidget w, ClientAuth a) {
+    	w.add(new AuthWidget(a));
+    }
+
+}
