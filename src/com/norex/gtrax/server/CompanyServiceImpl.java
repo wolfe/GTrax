@@ -92,4 +92,20 @@ public class CompanyServiceImpl extends GeneralServiceImpl implements
 		return list;
 	}
 
+	@Override
+	public ArrayList<ClientAuth> getAuthMembers(ClientCompany m) {
+		PersistenceManager pm = PMF.getPersistenceManager();
+		ArrayList<ClientAuth> auths = new ArrayList<ClientAuth>();
+		try {
+			Company e = pm.getObjectById(Company.class, m.getId());
+			for (Auth a : e.getAuthSet()) {
+				auths.add(a.toClient());
+			}
+		} finally {
+			pm.close();
+		}
+		
+		return auths;
+	}
+
 }

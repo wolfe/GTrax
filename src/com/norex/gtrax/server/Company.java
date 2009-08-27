@@ -57,11 +57,6 @@ public class Company extends Model {
     	tmp.setName(this.getName());
     	tmp.setId(KeyFactory.keyToString(this.getId()));
     	
-    	List<ClientAuth> authSet = new ArrayList<ClientAuth>();
-    	for (Auth a : this.getAuthSet()) {
-    		tmp.getAuthSet().add((ClientAuth) a.toClient());
-    	}
-    	
     	return tmp;
 	}
 

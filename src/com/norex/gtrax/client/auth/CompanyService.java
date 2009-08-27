@@ -12,5 +12,6 @@ public interface CompanyService extends RemoteService {
     public ArrayList<ClientCompany> getAll();
     public void delete(ClientCompany m);
     public void save(ClientCompany m);
+    public ArrayList<ClientAuth> getAuthMembers(ClientCompany m);
     public ArrayList<ClientContact> getContacts();
 }

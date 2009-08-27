@@ -40,6 +40,7 @@ public class CompanyWidget extends Composite implements HasWidgets {
 	private TextBox name = new TextBox();
 	private DisclosurePanelHeader label;
 	private Button edit = new Button("edit");
+	private VerticalPanel publicPanel = new VerticalPanel();
 	
 	private ClientCompany company = new ClientCompany();
 	private ClickHandler deleteHandler = new ClickHandler() {
@@ -105,6 +106,7 @@ public class CompanyWidget extends Composite implements HasWidgets {
 		show();
 		
 		p.add(editpanel);
+		p.add(publicPanel);
 		initWidget(container);
 	}
 
@@ -203,22 +205,22 @@ public class CompanyWidget extends Composite implements HasWidgets {
 	
 	@Override
 	public void add(Widget w) {
-		p.add(w);
+		publicPanel.add(w);
 	}
 
 	@Override
 	public void clear() {
-		p.clear();
+		publicPanel.clear();
 	}
 
 	@Override
 	public Iterator<Widget> iterator() {
-		return p.iterator();
+		return publicPanel.iterator();
 	}
 
 	@Override
 	public boolean remove(Widget w) {
-		return p.remove(w);
+		return publicPanel.remove(w);
 	}
 }
 

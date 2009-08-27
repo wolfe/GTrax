@@ -32,9 +32,9 @@ public class Main implements ViewInterface {
 	final VerticalPanel p = new VerticalPanel();
 	
 	AuthServiceAsync authService = GWT.create(AuthService.class);
+	final CompanyServiceAsync companyService = GWT.create(CompanyService.class);
 
     public VerticalPanel getView() {
-    	final CompanyServiceAsync companyService = GWT.create(CompanyService.class);
     	
     	create.addClickHandler(new ClickHandler() {
 			
@@ -91,39 +91,62 @@ public class Main implements ViewInterface {
 			}
 		});
     	
-    	HorizontalPanel newUser = new HorizontalPanel();
-    	final TextBox email = new TextBox();
-    	Button add = new Button("add");
-    	w.add(newUser);
-    	
-    	w.add(new Label("Current Members:"));
-    	
-    	for (ClientAuth a : m.getAuthSet()) {
-    		addUserToCompany(w, a);
-    	}
-    	
-    	newUser.add(new Label("Add a new user to this company: "));
-    	newUser.add(email);
-    	newUser.add(add);
-    	add.addClickHandler(new ClickHandler() {
-			
+    	w.addOpenHandler(new OpenHandler<DisclosurePanel>() {
+
 			@Override
-			public void onClick(ClickEvent event) {
-				ClientAuth auth = new ClientAuth();
-				auth.setEmail(email.getValue());
-				authService.create(m, auth, new AsyncCallback<ClientAuth>() {
+			public void onOpen(OpenEvent<DisclosurePanel> event) {
+				companyService.getAuthMembers(m, new AsyncCallback<ArrayList<ClientAuth>>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
 					}
 
 					@Override
-					public void onSuccess(ClientAuth result) {
-						addUserToCompany(w, result);
+					public void onSuccess(final ArrayList<ClientAuth> authlist) {
+						w.clear();
+						
+
+				    	HorizontalPanel newUser = new HorizontalPanel();
+				    	final TextBox email = new TextBox();
+				    	Button add = new Button("add");
+				    	w.add(newUser);
+				    	
+				    	newUser.add(new Label("Add a new user to this company: "));
+				    	newUser.add(email);
+				    	newUser.add(add);
+				    	add.addClickHandler(new ClickHandler() {
+							
+							@Override
+							public void onClick(ClickEvent event) {
+								ClientAuth auth = new ClientAuth();
+								auth.setEmail(email.getValue());
+								authService.create(m, auth, new AsyncCallback<ClientAuth>() {
+
+									@Override
+									public void onFailure(Throwable caught) {
+									}
+
+									@Override
+									public void onSuccess(ClientAuth result) {
+										if (authlist.size() == 0) w.add(new Label("Current Members:"));
+										addUserToCompany(w, result);
+									}
+								});
+							}
+						});
+						
+				    	
+				    	if (authlist.size() > 0) {
+							w.add(new Label("Current Members:"));
+							for (ClientAuth a : authlist) {
+								addUserToCompany(w, a);
+							}
+				    	}
 					}
 				});
 			}
 		});
+    	
     	
     	p.insert(w, p.getWidgetIndex(name));
     	

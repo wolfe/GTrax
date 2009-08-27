@@ -1,8 +1,8 @@
-<!-- Indices written at Wed, 26 Aug 2009 21:23:31 UTC -->
+<!-- Indices written at Thu, 27 Aug 2009 00:19:41 UTC -->
 
 <datastore-indexes>
 
-    <!-- Used 9 times in query history -->
+    <!-- Used 19 times in query history -->
     <datastore-index kind="Auth" ancestor="true" source="auto">
         <property name="authSet_INTEGER_IDX" direction="asc"/>
     </datastore-index>
