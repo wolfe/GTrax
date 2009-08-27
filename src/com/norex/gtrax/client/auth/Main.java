@@ -28,7 +28,7 @@ public class Main implements ViewInterface {
 	final CompanyServiceAsync companyService = GWT.create(CompanyService.class);
 
     public VerticalPanel getView() {
-    	
+    	p.clear();
     	create.addClickHandler(new ClickHandler() {
 			
 			

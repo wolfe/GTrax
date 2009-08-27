@@ -1,10 +1,4 @@
-<!-- Indices written at Thu, 27 Aug 2009 18:47:42 UTC -->
+<!-- Indices written at Thu, 27 Aug 2009 22:19:57 UTC -->
 
-<datastore-indexes>
+<datastore-indexes/>
 
-    <!-- Used 1 time in query history -->
-    <datastore-index kind="Auth" ancestor="true" source="auto">
-        <property name="authSet_INTEGER_IDX" direction="asc"/>
-    </datastore-index>
-
-</datastore-indexes>

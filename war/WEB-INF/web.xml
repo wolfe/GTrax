@@ -30,5 +30,15 @@
     <url-pattern>/gtrax/auth</url-pattern>
   </servlet-mapping>
   
+    <servlet>
+    <servlet-name>ContactServiceImpl</servlet-name>
+    <servlet-class>com.norex.gtrax.server.ContactServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>ContactServiceImpl</servlet-name>
+    <url-pattern>/gtrax/contact</url-pattern>
+  </servlet-mapping>
+  
   
 </web-app>

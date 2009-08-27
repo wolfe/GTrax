@@ -4,8 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.RunAsyncCallback;
+import com.google.gwt.dom.client.StyleInjector;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.resources.client.ClientBundle;
+import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -18,6 +22,18 @@ import com.norex.gtrax.client.auth.Main;
 import com.norex.gtrax.client.contact.ContactView;
 
 public class Header {
+	
+	interface AppCSS extends CssResource {
+		String header();
+	}
+	
+	interface AppCSSResource extends ClientBundle {
+		public AppCSSResource INSTANCE = GWT.create(AppCSSResource.class);
+		
+		@Source("app.css")
+		AppCSS css();
+	}
+	
     /**
      * A mapping of history tokens to their associated menu items.
      */
@@ -26,7 +42,7 @@ public class Header {
     /**
      * A mapping of menu items to the widget display when the item is selected.
      */
-    private Map<Hyperlink, Class> itemWidgets = new HashMap<Hyperlink, Class>();
+    private Map<Hyperlink, ViewInterface> itemWidgets = new HashMap<Hyperlink, ViewInterface>();
 
     final DockPanel header = new DockPanel();
     HorizontalPanel menu = new HorizontalPanel();
@@ -34,6 +50,7 @@ public class Header {
     final ValueChangeHandler<String> historyHandler;
 
     public Header() {
+    	StyleInjector.injectStylesheet(AppCSSResource.INSTANCE.css().getText());
 //	addViewInterface("timesheet", (ViewInterface) GWT
 //		.create(TimesheetView.class));
 //	addViewInterface("customers", (ViewInterface) GWT
@@ -43,29 +60,39 @@ public class Header {
 //	addViewInterface("permissions", (ViewInterface) GWT
 //		.create(PermissionsView.class));
 
-	addViewInterface("main", Main.class);
+	addViewInterface("main", new Main());
 	
-	addViewInterface("contact", ContactView.class);
+	addViewInterface("contact", new ContactView());
 
 	
-	header.setHorizontalAlignment(DockPanel.ALIGN_RIGHT);
+	header.setHorizontalAlignment(DockPanel.ALIGN_LEFT);
 	header.setWidth("100%");
 	header.setSpacing(0);
-
+	header.addStyleName(AppCSSResource.INSTANCE.css().header());
+	
 	menu.getElement().setId("menu_table");
 
 	header.add(menu, DockPanel.EAST);
 
 	this.historyHandler = new ValueChangeHandler<String>() {
-	    public void onValueChange(ValueChangeEvent<String> event) {
-		RootPanel.get("content").clear();
-		Hyperlink item = itemTokens.get(event.getValue());
-		if (item == null) {
-		    return;
-		}
-
-		ViewInterface i = GWT.create(itemWidgets.get(item));
-		RootPanel.get("content").add(i.getView());
+	    public void onValueChange(final ValueChangeEvent<String> event) {
+	    	GWT.runAsync(new RunAsyncCallback() {
+				
+				@Override
+				public void onSuccess() {
+					RootPanel.get("content").clear();
+					Hyperlink item = itemTokens.get(event.getValue());
+					if (item == null) {
+					    return;
+					}
+					//ViewInterface i = GWT.create(itemWidgets.get(item));
+					RootPanel.get("content").add(itemWidgets.get(item).getView());
+				}
+				
+				@Override
+				public void onFailure(Throwable reason) {
+				}
+			});
 	    }
 	};
     }
@@ -74,7 +101,7 @@ public class Header {
 	return header;
     }
 
-    public void addViewInterface(String text, Class cls) {
+    public void addViewInterface(String text, ViewInterface cls) {
 	String token = getWidgetToken(cls);
 
 	Hyperlink widget = new Hyperlink(text, token);
@@ -85,8 +112,8 @@ public class Header {
 	this.addMenuItem(widget);
     }
 
-    private String getWidgetToken(Class cls) {
-	String className = cls.getName();
+    private String getWidgetToken(ViewInterface cls) {
+	String className = cls.getClass().getName();
 	className = className.substring(className.lastIndexOf('.') + 1);
 	return className;
     }
