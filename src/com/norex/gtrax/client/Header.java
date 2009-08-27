@@ -14,6 +14,8 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.norex.gtrax.client.auth.Main;
+import com.norex.gtrax.client.contact.ContactView;
 
 public class Header {
     /**
@@ -24,7 +26,7 @@ public class Header {
     /**
      * A mapping of menu items to the widget display when the item is selected.
      */
-    private Map<Hyperlink, ViewInterface> itemWidgets = new HashMap<Hyperlink, ViewInterface>();
+    private Map<Hyperlink, Class> itemWidgets = new HashMap<Hyperlink, Class>();
 
     final DockPanel header = new DockPanel();
     HorizontalPanel menu = new HorizontalPanel();
@@ -41,8 +43,9 @@ public class Header {
 //	addViewInterface("permissions", (ViewInterface) GWT
 //		.create(PermissionsView.class));
 
-	addViewInterface("main", (ViewInterface) GWT
-	.create(Main.class));
+	addViewInterface("main", Main.class);
+	
+	addViewInterface("contact", ContactView.class);
 
 	
 	header.setHorizontalAlignment(DockPanel.ALIGN_RIGHT);
@@ -51,7 +54,7 @@ public class Header {
 
 	menu.getElement().setId("menu_table");
 
-	header.add(menu, DockPanel.WEST);
+	header.add(menu, DockPanel.EAST);
 
 	this.historyHandler = new ValueChangeHandler<String>() {
 	    public void onValueChange(ValueChangeEvent<String> event) {
@@ -61,7 +64,7 @@ public class Header {
 		    return;
 		}
 
-		ViewInterface i = itemWidgets.get(item);
+		ViewInterface i = GWT.create(itemWidgets.get(item));
 		RootPanel.get("content").add(i.getView());
 	    }
 	};
@@ -71,7 +74,7 @@ public class Header {
 	return header;
     }
 
-    public void addViewInterface(String text, ViewInterface cls) {
+    public void addViewInterface(String text, Class cls) {
 	String token = getWidgetToken(cls);
 
 	Hyperlink widget = new Hyperlink(text, token);
@@ -82,8 +85,8 @@ public class Header {
 	this.addMenuItem(widget);
     }
 
-    private String getWidgetToken(ViewInterface cls) {
-	String className = cls.getClass().getName();
+    private String getWidgetToken(Class cls) {
+	String className = cls.getName();
 	className = className.substring(className.lastIndexOf('.') + 1);
 	return className;
     }
