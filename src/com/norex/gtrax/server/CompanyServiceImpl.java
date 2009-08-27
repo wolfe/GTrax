@@ -25,7 +25,7 @@ public class CompanyServiceImpl extends GeneralServiceImpl implements
 		return (ClientCompany)c.toClient();
 	}
 
-	@Override
+	
 	public ArrayList<ClientCompany> getAll() {
 		PersistenceManager pm = PMF.getPersistenceManager();
 		
@@ -47,7 +47,7 @@ public class CompanyServiceImpl extends GeneralServiceImpl implements
 		return list;
 	}
 	
-	@Override
+	
 	public void delete(ClientCompany m) {
 		PersistenceManager pm = PMF.getPersistenceManager();
 		try {
@@ -58,7 +58,7 @@ public class CompanyServiceImpl extends GeneralServiceImpl implements
 		}
 	}
 
-	@Override
+	
 	public void save(ClientCompany m) {
 		PersistenceManager pm = PMF.getPersistenceManager();
 		try {
@@ -70,7 +70,7 @@ public class CompanyServiceImpl extends GeneralServiceImpl implements
 		}
 	}
 
-	@Override
+	
 	public ArrayList<ClientContact> getContacts() {
 		PersistenceManager pm = PMF.getPersistenceManager();
 		
@@ -92,7 +92,7 @@ public class CompanyServiceImpl extends GeneralServiceImpl implements
 		return list;
 	}
 
-	@Override
+	
 	public ArrayList<ClientAuth> getAuthMembers(ClientCompany m) {
 		PersistenceManager pm = PMF.getPersistenceManager();
 		ArrayList<ClientAuth> auths = new ArrayList<ClientAuth>();

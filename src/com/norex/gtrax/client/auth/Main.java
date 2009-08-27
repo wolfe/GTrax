@@ -31,19 +31,19 @@ public class Main implements ViewInterface {
     	
     	create.addClickHandler(new ClickHandler() {
 			
-			@Override
+			
 			public void onClick(ClickEvent event) {
 				ClientCompany m = new ClientCompany();
 				m.set("name", name.getValue());
 				companyService.create(m, new AsyncCallback<ClientCompany>() {
 
-					@Override
+					
 					public void onFailure(Throwable caught) {
 						// TODO Auto-generated method stub
 						
 					}
 
-					@Override
+					
 					public void onSuccess(ClientCompany result) {
 						addToList(result);
 						name.setText(null);
@@ -57,7 +57,7 @@ public class Main implements ViewInterface {
 	
 		companyService.getAll(new AsyncCallback<ArrayList<ClientCompany>>() {
 	
-			@Override
+			
 			public void onFailure(Throwable caught) {
 				// TODO Auto-generated method stub
 				
@@ -78,7 +78,7 @@ public class Main implements ViewInterface {
     	final CompanyWidget w = new CompanyWidget(m);
     	w.addDeleteHandler(new ClickHandler() {
 			
-			@Override
+			
 			public void onClick(ClickEvent event) {
 				w.removeFromParent();
 			}
@@ -86,15 +86,15 @@ public class Main implements ViewInterface {
     	
     	w.addOpenHandler(new OpenHandler<DisclosurePanel>() {
 
-			@Override
+			
 			public void onOpen(OpenEvent<DisclosurePanel> event) {
 				companyService.getAuthMembers(m, new AsyncCallback<ArrayList<ClientAuth>>() {
 
-					@Override
+					
 					public void onFailure(Throwable caught) {
 					}
 
-					@Override
+					
 					public void onSuccess(final ArrayList<ClientAuth> authlist) {
 						w.clear();
 						
@@ -109,17 +109,17 @@ public class Main implements ViewInterface {
 				    	newUser.add(add);
 				    	add.addClickHandler(new ClickHandler() {
 							
-							@Override
+							
 							public void onClick(ClickEvent event) {
 								ClientAuth auth = new ClientAuth();
 								auth.setEmail(email.getValue());
 								authService.create(m, auth, new AsyncCallback<ClientAuth>() {
 
-									@Override
+									
 									public void onFailure(Throwable caught) {
 									}
 
-									@Override
+									
 									public void onSuccess(ClientAuth result) {
 										if (authlist.size() == 0) w.add(new Label("Current Members:"));
 										addUserToCompany(w, result);
