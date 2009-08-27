@@ -45,7 +45,7 @@ public class CompanyWidget extends Composite implements HasWidgets {
 	private ClientCompany company = new ClientCompany();
 	private ClickHandler deleteHandler = new ClickHandler() {
 		
-		@Override
+		
 		public void onClick(ClickEvent event) {
 			// TODO Auto-generated method stub
 			
@@ -53,7 +53,7 @@ public class CompanyWidget extends Composite implements HasWidgets {
 	};
 	private ClickHandler saveHandler = new ClickHandler() {
 		
-		@Override
+		
 		public void onClick(ClickEvent event) {
 			// TODO Auto-generated method stub
 			
@@ -61,13 +61,13 @@ public class CompanyWidget extends Composite implements HasWidgets {
 	};
 	private OpenHandler<DisclosurePanel> openHandler = new OpenHandler<DisclosurePanel>() {
 
-		@Override
+		
 		public void onOpen(OpenEvent<DisclosurePanel> event) {
 		}
 	};
 	private CloseHandler<DisclosurePanel> closeHandler = new CloseHandler<DisclosurePanel>() {
 
-		@Override
+		
 		public void onClose(CloseEvent<DisclosurePanel> event) {
 		}
 	};
@@ -82,7 +82,7 @@ public class CompanyWidget extends Composite implements HasWidgets {
 
 		container.addOpenHandler(new OpenHandler<DisclosurePanel>() {
 			
-			@Override
+			
 			public void onOpen(OpenEvent<DisclosurePanel> event) {
 				setName(company.getName());
 				openHandler.onOpen(event);
@@ -90,7 +90,7 @@ public class CompanyWidget extends Composite implements HasWidgets {
 		});
 		container.addCloseHandler(new CloseHandler<DisclosurePanel>() {
 			
-			@Override
+			
 			public void onClose(CloseEvent<DisclosurePanel> event) {
 				setName((String) company.getName());
 				closeHandler.onClose(event);
@@ -98,7 +98,7 @@ public class CompanyWidget extends Composite implements HasWidgets {
 		});
 		edit.addClickHandler(new ClickHandler() {
 			
-			@Override
+			
 			public void onClick(ClickEvent event) {
 				edit();
 			}
@@ -130,7 +130,7 @@ public class CompanyWidget extends Composite implements HasWidgets {
 		save.setText("Save");
 		save.addClickHandler(new ClickHandler() {
 			
-			@Override
+			
 			public void onClick(final ClickEvent event) {
 				if (name.getValue().equals(company.getName())) {
 					show();
@@ -141,13 +141,13 @@ public class CompanyWidget extends Composite implements HasWidgets {
 				company.setName(name.getValue());
 				companyService.save(company, new AsyncCallback() {
 
-					@Override
+					
 					public void onFailure(Throwable caught) {
 						// TODO Auto-generated method stub
 						
 					}
 
-					@Override
+					
 					public void onSuccess(Object result) {
 						saveHandler.onClick(event);
 						show();
@@ -158,18 +158,18 @@ public class CompanyWidget extends Composite implements HasWidgets {
 		Button delete = new Button("Delete");
 		delete.addClickHandler(new ClickHandler() {
 			
-			@Override
+			
 			public void onClick(final ClickEvent event) {
 				if (Window.confirm("Are you sure??")) {
 					CompanyServiceAsync companyService = GWT.create(CompanyService.class);
 					companyService.delete(company, new AsyncCallback() {
 
-						@Override
+						
 						public void onSuccess(Object result) {
 							deleteHandler.onClick(event);
 						}
 
-						@Override
+						
 						public void onFailure(Throwable caught) {
 							// TODO Auto-generated method stub
 							
@@ -203,22 +203,21 @@ public class CompanyWidget extends Composite implements HasWidgets {
 		this.closeHandler = event;
 	}
 	
-	@Override
+	
 	public void add(Widget w) {
 		publicPanel.add(w);
 	}
 
-	@Override
 	public void clear() {
 		publicPanel.clear();
 	}
 
-	@Override
+	
 	public Iterator<Widget> iterator() {
 		return publicPanel.iterator();
 	}
 
-	@Override
+	
 	public boolean remove(Widget w) {
 		return publicPanel.remove(w);
 	}
