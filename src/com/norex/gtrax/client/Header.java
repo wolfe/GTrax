@@ -10,10 +10,13 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Hyperlink;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -32,6 +35,9 @@ public class Header {
 		
 		@Source("app.css")
 		AppCSS css();
+		
+		@Source("norexLogo.png")
+		ImageResource logo();
 	}
 	
     /**
@@ -51,82 +57,74 @@ public class Header {
 
     public Header() {
     	StyleInjector.injectStylesheet(AppCSSResource.INSTANCE.css().getText());
-//	addViewInterface("timesheet", (ViewInterface) GWT
-//		.create(TimesheetView.class));
-//	addViewInterface("customers", (ViewInterface) GWT
-//		.create(ContactView.class));
-//	addViewInterface("projects", (ViewInterface) GWT
-//		.create(ProjectView.class));
-//	addViewInterface("permissions", (ViewInterface) GWT
-//		.create(PermissionsView.class));
 
-	addViewInterface("main", new Main());
+    	menu.add(new Image(AppCSSResource.INSTANCE.logo().getURL()));
+    	
+		addViewInterface("Companies", new Main());
+		addViewInterface("Contacts", new ContactView());
 	
-	addViewInterface("contact", new ContactView());
-
+		header.setHorizontalAlignment(DockPanel.ALIGN_LEFT);
+		header.setWidth("100%");
+		header.setSpacing(0);
+		header.addStyleName(AppCSSResource.INSTANCE.css().header());
+		
+		menu.getElement().setId("menu_table");
 	
-	header.setHorizontalAlignment(DockPanel.ALIGN_LEFT);
-	header.setWidth("100%");
-	header.setSpacing(0);
-	header.addStyleName(AppCSSResource.INSTANCE.css().header());
+		header.add(menu, DockPanel.EAST);
 	
-	menu.getElement().setId("menu_table");
-
-	header.add(menu, DockPanel.EAST);
-
-	this.historyHandler = new ValueChangeHandler<String>() {
-	    public void onValueChange(final ValueChangeEvent<String> event) {
-	    	GWT.runAsync(new RunAsyncCallback() {
-				
-				@Override
-				public void onSuccess() {
-					RootPanel.get("content").clear();
-					Hyperlink item = itemTokens.get(event.getValue());
-					if (item == null) {
-					    return;
+		this.historyHandler = new ValueChangeHandler<String>() {
+		    public void onValueChange(final ValueChangeEvent<String> event) {
+		    	GWT.runAsync(new RunAsyncCallback() {
+					
+					@Override
+					public void onSuccess() {
+						RootPanel.get("content").clear();
+						Hyperlink item = itemTokens.get(event.getValue());
+						if (item == null) {
+						    return;
+						}
+						//ViewInterface i = GWT.create(itemWidgets.get(item));
+						RootPanel.get("content").add(itemWidgets.get(item).getView());
 					}
-					//ViewInterface i = GWT.create(itemWidgets.get(item));
-					RootPanel.get("content").add(itemWidgets.get(item).getView());
-				}
-				
-				@Override
-				public void onFailure(Throwable reason) {
-				}
-			});
-	    }
-	};
+					
+					@Override
+					public void onFailure(Throwable reason) {
+					}
+				});
+		    }
+		};
     }
     
     public Panel getHeader() {
-	return header;
+    	return header;
     }
 
     public void addViewInterface(String text, ViewInterface cls) {
-	String token = getWidgetToken(cls);
-
-	Hyperlink widget = new Hyperlink(text, token);
-
-	itemWidgets.put(widget, cls);
-	itemTokens.put(token, widget);
-
-	this.addMenuItem(widget);
+		String token = getWidgetToken(cls);
+	
+		Hyperlink widget = new Hyperlink(text, token);
+	
+		itemWidgets.put(widget, cls);
+		itemTokens.put(token, widget);
+	
+		this.addMenuItem(widget);
     }
 
     private String getWidgetToken(ViewInterface cls) {
-	String className = cls.getClass().getName();
-	className = className.substring(className.lastIndexOf('.') + 1);
-	return className;
+		String className = cls.getClass().getName();
+		className = className.substring(className.lastIndexOf('.') + 1);
+		return className;
     }
 
     public DockPanel getComposite() {
-	return this.header;
+    	return this.header;
     }
 
     public void addMenuItem(Hyperlink item) {
-	menu.add(item);
+    	menu.add(item);
     }
 
     public void addItem(Widget item) {
-	header.add(item, DockPanel.WEST);
+    	header.add(item, DockPanel.WEST);
     }
 }
