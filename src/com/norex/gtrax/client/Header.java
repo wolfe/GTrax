@@ -11,13 +11,13 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.Window;
+import com.google.gwt.resources.client.ImageResource.ImageOptions;
+import com.google.gwt.resources.client.ImageResource.RepeatStyle;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Hyperlink;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ImageBundle;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -30,14 +30,26 @@ public class Header {
 		String header();
 	}
 	
-	interface AppCSSResource extends ClientBundle {
-		public AppCSSResource INSTANCE = GWT.create(AppCSSResource.class);
+	interface AppImageBundle extends ImageBundle {
+		public AppImageBundle INSTANCE = GWT.create(AppImageBundle.class);
+		
+		@Resource("norexLogo.png")
+		AbstractImagePrototype logo();
+		
+		@Resource("logo.png")
+		AbstractImagePrototype logoWhite();
+		
+	}
+	
+	interface AppResource extends ClientBundle {
+		public AppResource INSTANCE = GWT.create(AppResource.class);
 		
 		@Source("app.css")
 		AppCSS css();
 		
-		@Source("norexLogo.png")
-		ImageResource logo();
+		@Source("top-bg.png")
+		@ImageOptions(repeatStyle=RepeatStyle.Horizontal)
+		ImageResource background();
 	}
 	
     /**
@@ -56,9 +68,9 @@ public class Header {
     final ValueChangeHandler<String> historyHandler;
 
     public Header() {
-    	StyleInjector.injectStylesheet(AppCSSResource.INSTANCE.css().getText());
+    	StyleInjector.injectStylesheet(AppResource.INSTANCE.css().getText());
 
-    	menu.add(new Image(AppCSSResource.INSTANCE.logo().getURL()));
+    	menu.add(AppImageBundle.INSTANCE.logo().createImage());
     	
 		addViewInterface("Companies", new Main());
 		addViewInterface("Contacts", new ContactView());
@@ -66,7 +78,7 @@ public class Header {
 		header.setHorizontalAlignment(DockPanel.ALIGN_LEFT);
 		header.setWidth("100%");
 		header.setSpacing(0);
-		header.addStyleName(AppCSSResource.INSTANCE.css().header());
+		header.addStyleName(AppResource.INSTANCE.css().header());
 		
 		menu.getElement().setId("menu_table");
 	

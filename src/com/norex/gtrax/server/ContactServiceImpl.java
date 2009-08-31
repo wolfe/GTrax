@@ -33,4 +33,15 @@ public class ContactServiceImpl extends GeneralServiceImpl implements
 		return list;
 	}
 
+	@Override
+	public ClientContact create(ClientContact contact) {
+		Contact c = new Contact();
+		c.setEmail(contact.getEmail());
+		c.setName(contact.getName());
+		
+		c.save();
+		
+		return c.toClient();
+	}
+
 }

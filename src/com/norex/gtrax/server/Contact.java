@@ -62,7 +62,7 @@ public class Contact extends Model {
 		ClientContact tmp = new ClientContact();
 		tmp.setName(this.getName());
 		tmp.setEmail(this.getEmail());
-		tmp.setCompany(this.getCompany().toClient());
+		//tmp.setCompany(this.getCompany().toClient());
 		tmp.setId(KeyFactory.keyToString(this.getId()));
 		
 		return tmp;

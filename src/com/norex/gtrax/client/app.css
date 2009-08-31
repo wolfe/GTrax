@@ -1,8 +1,9 @@
-.header {
+@sprite .header {
 	background-color: #888;
 	font-color: #fff;
 	padding: 6px;
 	margin-bottom: 10px;
+	gwt-image: "background";
 }
 
 .header a {
