@@ -1,10 +1,6 @@
 package com.norex.gtrax.server;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.jdo.PersistenceManager;
-import javax.jdo.Query;
 
 import com.norex.gtrax.client.auth.AuthService;
 import com.norex.gtrax.client.auth.ClientAuth;

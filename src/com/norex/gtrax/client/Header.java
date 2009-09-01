@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.dom.client.StyleInjector;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -13,6 +12,7 @@ import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.resources.client.ImageResource.ImageOptions;
 import com.google.gwt.resources.client.ImageResource.RepeatStyle;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -21,6 +21,9 @@ import com.google.gwt.user.client.ui.ImageBundle;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.norex.gtrax.client.auth.ClientCompany;
+import com.norex.gtrax.client.auth.CompanyService;
+import com.norex.gtrax.client.auth.CompanyServiceAsync;
 import com.norex.gtrax.client.auth.Main;
 import com.norex.gtrax.client.contact.ContactView;
 
@@ -65,16 +68,13 @@ public class Header {
     final DockPanel header = new DockPanel();
     HorizontalPanel menu = new HorizontalPanel();
 
-    final ValueChangeHandler<String> historyHandler;
+    ValueChangeHandler<String> historyHandler;
 
     public Header() {
     	StyleInjector.injectStylesheet(AppResource.INSTANCE.css().getText());
 
     	menu.add(AppImageBundle.INSTANCE.logo().createImage());
     	
-		addViewInterface("Companies", new Main());
-		addViewInterface("Contacts", new ContactView());
-	
 		header.setHorizontalAlignment(DockPanel.ALIGN_LEFT);
 		header.setWidth("100%");
 		header.setSpacing(0);
@@ -83,29 +83,45 @@ public class Header {
 		menu.getElement().setId("menu_table");
 	
 		header.add(menu, DockPanel.EAST);
-	
+		
+		final HorizontalPanel login = new HorizontalPanel();
+		header.add(login, DockPanel.EAST);
+		
+		CompanyServiceAsync companyService = GWT.create(CompanyService.class);
+		companyService.login(new AsyncCallback<ClientCompany>() {
+			
+			@Override
+			public void onSuccess(ClientCompany result) {
+				if (result == null) {
+					
+					return;
+				}
+				
+				addViewInterface("Companies", new Main());
+				addViewInterface("Contacts", new ContactView());
+			}
+			
+			@Override
+			public void onFailure(Throwable caught) {
+//				if (caught instanceof NotLoggedInException) {
+//					Window.Location.replace(((NotLoggedInException) caught).loginURL);
+//				}
+			}
+		});
+		
 		this.historyHandler = new ValueChangeHandler<String>() {
 		    public void onValueChange(final ValueChangeEvent<String> event) {
-		    	GWT.runAsync(new RunAsyncCallback() {
-					
-					@Override
-					public void onSuccess() {
-						RootPanel.get("content").clear();
-						Hyperlink item = itemTokens.get(event.getValue());
-						if (item == null) {
-						    return;
-						}
-						//ViewInterface i = GWT.create(itemWidgets.get(item));
-						RootPanel.get("content").add(itemWidgets.get(item).getView());
-					}
-					
-					@Override
-					public void onFailure(Throwable reason) {
-					}
-				});
+		    	RootPanel.get("content").clear();
+				Hyperlink item = itemTokens.get(event.getValue());
+				if (item == null) {
+					return;
+				}
+				//ViewInterface i = GWT.create(itemWidgets.get(item));
+				RootPanel.get("content").add(itemWidgets.get(item).getView());
 		    }
 		};
     }
+    
     
     public Panel getHeader() {
     	return header;

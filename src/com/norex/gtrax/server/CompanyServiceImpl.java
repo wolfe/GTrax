@@ -6,9 +6,9 @@ import java.util.List;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import com.norex.gtrax.client.ClientModel;
+import com.google.appengine.api.users.User;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.norex.gtrax.client.auth.ClientAuth;
 import com.norex.gtrax.client.auth.ClientCompany;
 import com.norex.gtrax.client.auth.ClientContact;
@@ -107,5 +107,19 @@ public class CompanyServiceImpl extends GeneralServiceImpl implements
 		
 		return auths;
 	}
+
+
+	@Override
+	public ClientCompany login() {
+		UserService userService = UserServiceFactory.getUserService();
+		if (!userService.isUserLoggedIn()) {
+		}
+		
+		User user = userService.getCurrentUser();
+		
+		return new ClientCompany();
+	}
+	
+	
 
 }

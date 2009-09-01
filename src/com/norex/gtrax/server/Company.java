@@ -11,7 +11,6 @@ import javax.jdo.annotations.PrimaryKey;
 
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
-import com.norex.gtrax.client.auth.ClientAuth;
 import com.norex.gtrax.client.auth.ClientCompany;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
