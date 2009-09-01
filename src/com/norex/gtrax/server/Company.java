@@ -1,7 +1,9 @@
 package com.norex.gtrax.server;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
@@ -23,8 +25,11 @@ public class Company extends Model {
 	@Persistent
 	protected String name = new String();
 
-	@Persistent(mappedBy = "company")
-	protected List<Auth> authSet = new ArrayList<Auth>();
+	@Persistent(mappedBy="company")
+	protected ArrayList<Auth> authSet = new ArrayList<Auth>();
+	
+	@Persistent(mappedBy="company")
+	protected ArrayList<Contact> contactSet = new ArrayList<Contact>();
 
 	public void setId(Key id) {
 		this.id = id;
@@ -42,14 +47,22 @@ public class Company extends Model {
 		return name;
 	}
 
-	public List<Auth> getAuthSet() {
+	public ArrayList<Auth> getAuthSet() {
 		return authSet;
 	}
 
-	public void setAuthSet(List<Auth> authSet) {
+	public void setAuthSet(ArrayList<Auth> authSet) {
 		this.authSet = authSet;
 	}
 	
+	public ArrayList<Contact> getContactSet() {
+		return contactSet;
+	}
+
+	public void setContactSet(ArrayList<Contact> contactSet) {
+		this.contactSet = contactSet;
+	}
+
 	public ClientCompany toClient() {
 		ClientCompany tmp = new ClientCompany();
     	

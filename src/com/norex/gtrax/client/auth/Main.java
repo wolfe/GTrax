@@ -34,7 +34,7 @@ public class Main implements ViewInterface {
 			
 			public void onClick(ClickEvent event) {
 				ClientCompany m = new ClientCompany();
-				m.set("name", name.getValue());
+				m.setName(name.getValue());
 				companyService.create(m, new AsyncCallback<ClientCompany>() {
 
 					

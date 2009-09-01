@@ -13,5 +13,5 @@ public interface CompanyService extends RemoteService {
     public void save(ClientCompany m);
     public ArrayList<ClientAuth> getAuthMembers(ClientCompany m);
     public ArrayList<ClientContact> getContacts();
-    public ClientCompany login();
+    public ClientAuth login(String url) throws NotLoggedInException;
 }

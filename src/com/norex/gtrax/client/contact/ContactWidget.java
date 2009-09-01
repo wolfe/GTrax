@@ -20,8 +20,10 @@ public class ContactWidget extends Composite {
 	
 	private ClientContact contact = new ClientContact();
 
-	public ContactWidget() {
+	public ContactWidget(ClientContact c) {
 		initWidget(container);
+		
+		this.contact = c;
 		
 		container.add(new Label("Full Name"));
 		container.add(name);
@@ -44,12 +46,6 @@ public class ContactWidget extends Composite {
 				contact.setEmail(email.getValue());
 			}
 		});
-	}
-	
-	public ContactWidget(ClientContact c) {
-		super();
-		
-		this.contact = c;
 		
 		name.setValue(c.getName());
 		email.setValue(c.getEmail());

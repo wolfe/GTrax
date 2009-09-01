@@ -20,14 +20,6 @@ public class Contact extends Model {
 	@Persistent
 	protected String name;
 	
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	@Persistent
 	protected String email;
 	
@@ -42,6 +34,14 @@ public class Contact extends Model {
 		this.id = id;
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 	public Company getCompany() {
 		return company;
 	}
@@ -58,11 +58,15 @@ public class Contact extends Model {
 		this.email = email;
 	}
 	
+	public void update(ClientContact contact) {
+		this.setEmail(contact.getEmail());
+		this.setName(contact.getName());
+	}
+	
 	public ClientContact toClient() {
 		ClientContact tmp = new ClientContact();
 		tmp.setName(this.getName());
 		tmp.setEmail(this.getEmail());
-		//tmp.setCompany(this.getCompany().toClient());
 		tmp.setId(KeyFactory.keyToString(this.getId()));
 		
 		return tmp;

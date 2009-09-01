@@ -1,5 +1,8 @@
 package com.norex.gtrax.server;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
@@ -27,7 +30,7 @@ public class Auth extends Model {
 		return company;
 	}
 
-	public void setCompany(Company company) {
+	public void setCompanySet(Company company) {
 		this.company = company;
 	}
 
@@ -52,7 +55,6 @@ public class Auth extends Model {
 		
 		tmp.setId(KeyFactory.keyToString(this.getId()));
 		tmp.setEmail(this.getEmail());
-		tmp.setCompany(this.getCompany().toClient());
 		
 		return tmp;
 		

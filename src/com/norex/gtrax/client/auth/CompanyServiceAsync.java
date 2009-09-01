@@ -11,5 +11,5 @@ public interface CompanyServiceAsync  {
     public void save(ClientCompany m, AsyncCallback async);
     public void getAuthMembers(ClientCompany m, AsyncCallback<ArrayList<ClientAuth>> async);
     public void getContacts(AsyncCallback<ArrayList<ClientContact>> asyncCallback);
-    public void login(AsyncCallback<ClientCompany> async);
+    public void login(String url, AsyncCallback<ClientAuth> async);
 }

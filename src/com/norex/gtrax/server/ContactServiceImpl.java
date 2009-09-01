@@ -10,6 +10,7 @@ import com.norex.gtrax.client.auth.AuthService;
 import com.norex.gtrax.client.auth.ClientAuth;
 import com.norex.gtrax.client.auth.ClientCompany;
 import com.norex.gtrax.client.auth.ClientContact;
+import com.norex.gtrax.client.auth.NotLoggedInException;
 import com.norex.gtrax.client.contact.ContactService;
 
 public class ContactServiceImpl extends GeneralServiceImpl implements
@@ -17,31 +18,46 @@ public class ContactServiceImpl extends GeneralServiceImpl implements
 
 	@Override
 	public ArrayList<ClientContact> getCompanyContacts() {
-		PersistenceManager pm = PMF.getPersistenceManager();
-		
-		ArrayList<ClientContact> list = new ArrayList<ClientContact>();
-		Query query = pm.newQuery(Contact.class);
 		try {
-			List<Contact> rs = (List<Contact>) query.execute();
-			for (Contact c : rs) {
+			Auth u = AuthServiceImpl.getCurrentUser();
+			
+			ArrayList<ClientContact> list = new ArrayList<ClientContact>();
+			
+			for (Contact c : u.getCompany().getContactSet()) {
 				list.add(c.toClient());
 			}
-		} finally {
-			pm.close();
+			return list;
+		} catch (Exception e) {
+			return null;
 		}
-		
-		return list;
 	}
 
 	@Override
-	public ClientContact create(ClientContact contact) {
-		Contact c = new Contact();
-		c.setEmail(contact.getEmail());
-		c.setName(contact.getName());
+	public ClientContact save(ClientContact contact) {
+		Company company = null;
+		Contact c = null;
 		
-		c.save();
+		try {
+			company = AuthServiceImpl.getCurrentCompany();
+		} catch (NotLoggedInException e) {
+			return null;
+		}
 		
-		return c.toClient();
+		if (contact.getId() != null) {
+			PersistenceManager pm = PMF.getPersistenceManager();
+			c = pm.getObjectById(Contact.class, contact.getId());
+			c.update(contact);
+			pm.close();
+			
+			return c.toClient();
+		} else {
+			c = new Contact();
+			c.update(contact);
+			
+			company.getContactSet().add(c);
+			
+			return c.toClient();
+		}
 	}
 
 }

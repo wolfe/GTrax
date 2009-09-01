@@ -10,5 +10,5 @@ import com.norex.gtrax.client.auth.ClientContact;
 @RemoteServiceRelativePath("contact")
 public interface ContactService extends RemoteService {
 	public ArrayList<ClientContact> getCompanyContacts();
-	public ClientContact create(ClientContact contact);
+	public ClientContact save(ClientContact contact);
 }

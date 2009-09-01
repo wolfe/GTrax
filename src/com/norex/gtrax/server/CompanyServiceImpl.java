@@ -2,17 +2,21 @@ package com.norex.gtrax.server;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
+import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.gwt.core.client.GWT;
 import com.norex.gtrax.client.auth.ClientAuth;
 import com.norex.gtrax.client.auth.ClientCompany;
 import com.norex.gtrax.client.auth.ClientContact;
 import com.norex.gtrax.client.auth.CompanyService;
+import com.norex.gtrax.client.auth.NotLoggedInException;
 
 public class CompanyServiceImpl extends GeneralServiceImpl implements
 		CompanyService {
@@ -71,25 +75,19 @@ public class CompanyServiceImpl extends GeneralServiceImpl implements
 	}
 
 	
-	public ArrayList<ClientContact> getContacts() {
-		PersistenceManager pm = PMF.getPersistenceManager();
-		
-		ArrayList<ClientContact> list = new ArrayList<ClientContact>();
-		Query query = pm.newQuery(Contact.class);
-		
+	public ArrayList<ClientContact> getContacts() {	
 		try {
-			List<Contact> results = (List<Contact>) query.execute();
-			if (results.iterator().hasNext()) {
-	            for (Contact e : results) {
-	            	list.add(e.toClient());
-	            }
-	        }
-		} finally {
-			query.closeAll();
-			pm.close();
+			Auth u = AuthServiceImpl.getCurrentUser();
+			
+			ArrayList<ClientContact> list = new ArrayList<ClientContact>();
+			
+			for (Contact c : u.getCompany().getContactSet()) {
+				list.add(c.toClient());
+			}
+			return list;
+		} catch (Exception e) {
+			return null;
 		}
-		
-		return list;
 	}
 
 	
@@ -98,8 +96,11 @@ public class CompanyServiceImpl extends GeneralServiceImpl implements
 		ArrayList<ClientAuth> auths = new ArrayList<ClientAuth>();
 		try {
 			Company e = pm.getObjectById(Company.class, m.getId());
-			for (Auth a : e.getAuthSet()) {
-				auths.add(a.toClient());
+			
+			if (e.getAuthSet().iterator().hasNext()) {
+				for (Auth a : e.getAuthSet()) {
+					auths.add(a.toClient());
+				}
 			}
 		} finally {
 			pm.close();
@@ -110,14 +111,23 @@ public class CompanyServiceImpl extends GeneralServiceImpl implements
 
 
 	@Override
-	public ClientCompany login() {
+	public ClientAuth login(String url) throws NotLoggedInException {
 		UserService userService = UserServiceFactory.getUserService();
 		if (!userService.isUserLoggedIn()) {
+			NotLoggedInException e = new NotLoggedInException();
+			e.setLoginURL(userService.createLoginURL(url));
+			throw e;
 		}
 		
 		User user = userService.getCurrentUser();
 		
-		return new ClientCompany();
+		try {
+			return AuthServiceImpl.getCurrentUser().toClient();
+		} catch (Exception exception){
+			NotLoggedInException e = new NotLoggedInException();
+			e.setLoginURL(userService.createLoginURL(url));
+			throw e;
+		}
 	}
 	
 	

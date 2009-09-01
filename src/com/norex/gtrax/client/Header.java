@@ -12,19 +12,23 @@ import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.resources.client.ImageResource.ImageOptions;
 import com.google.gwt.resources.client.ImageResource.RepeatStyle;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.ImageBundle;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.norex.gtrax.client.auth.ClientAuth;
 import com.norex.gtrax.client.auth.ClientCompany;
 import com.norex.gtrax.client.auth.CompanyService;
 import com.norex.gtrax.client.auth.CompanyServiceAsync;
 import com.norex.gtrax.client.auth.Main;
+import com.norex.gtrax.client.auth.NotLoggedInException;
 import com.norex.gtrax.client.contact.ContactView;
 
 public class Header {
@@ -67,6 +71,7 @@ public class Header {
 
     final DockPanel header = new DockPanel();
     HorizontalPanel menu = new HorizontalPanel();
+    final HorizontalPanel login = new HorizontalPanel();
 
     ValueChangeHandler<String> historyHandler;
 
@@ -82,32 +87,29 @@ public class Header {
 		
 		menu.getElement().setId("menu_table");
 	
+		header.add(login, DockPanel.EAST);
 		header.add(menu, DockPanel.EAST);
 		
-		final HorizontalPanel login = new HorizontalPanel();
-		header.add(login, DockPanel.EAST);
-		
 		CompanyServiceAsync companyService = GWT.create(CompanyService.class);
-		companyService.login(new AsyncCallback<ClientCompany>() {
+		companyService.login(Window.Location.getHref(), new AsyncCallback<ClientAuth>() {
 			
 			@Override
-			public void onSuccess(ClientCompany result) {
-				if (result == null) {
-					
-					return;
-				}
+			public void onSuccess(ClientAuth result) {
+				login.add(new Label("Logged in as " + result.getEmail()));
 				
-				addViewInterface("Companies", new Main());
+				//addViewInterface("Companies", new Main());
 				addViewInterface("Contacts", new ContactView());
 			}
 			
 			@Override
 			public void onFailure(Throwable caught) {
-//				if (caught instanceof NotLoggedInException) {
-//					Window.Location.replace(((NotLoggedInException) caught).loginURL);
-//				}
+				if (caught instanceof NotLoggedInException) {
+					//Window.Location.replace(((NotLoggedInException) caught).getLoginURL());
+				}
 			}
 		});
+		
+		addViewInterface("Companies", new Main());
 		
 		this.historyHandler = new ValueChangeHandler<String>() {
 		    public void onValueChange(final ValueChangeEvent<String> event) {
