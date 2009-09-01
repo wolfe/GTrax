@@ -1,5 +1,7 @@
 package com.norex.gtrax.server;
 
+import java.util.ArrayList;
+
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
@@ -9,10 +11,11 @@ import javax.jdo.annotations.PrimaryKey;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.norex.gtrax.client.auth.ClientContact;
+import com.norex.gtrax.client.contact.EmailAddress;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class Contact extends Model {
-
+	
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     protected Key id;
@@ -20,8 +23,8 @@ public class Contact extends Model {
 	@Persistent
 	protected String name;
 	
-	@Persistent
-	protected String email;
+	@Persistent(serialized = "true")
+	protected ArrayList<EmailAddress> email = new ArrayList<EmailAddress>();
 	
 	@Persistent
 	protected Company company;
@@ -50,11 +53,11 @@ public class Contact extends Model {
 		this.company = company;
 	}
 
-	public String getEmail() {
+	public ArrayList<EmailAddress> getEmail() {
 		return email;
 	}
 
-	public void setEmail(String email) {
+	public void setEmail(ArrayList<EmailAddress> email) {
 		this.email = email;
 	}
 	

@@ -1,11 +1,14 @@
 package com.norex.gtrax.client.auth;
 
+import java.util.ArrayList;
+
 import com.norex.gtrax.client.ClientModel;
+import com.norex.gtrax.client.contact.EmailAddress;
 
 public class ClientContact extends ClientModel {
 	protected String id;
 	protected String name;
-	protected String email;
+	protected ArrayList<EmailAddress> email = new ArrayList<EmailAddress>();
 	protected ClientCompany company;
 	public ClientCompany getCompany() {
 		return company;
@@ -25,10 +28,10 @@ public class ClientContact extends ClientModel {
 	public void setId(String id) {
 		this.id = id;
 	}
-	public String getEmail() {
+	public ArrayList<EmailAddress> getEmail() {
 		return email;
 	}
-	public void setEmail(String email) {
+	public void setEmail(ArrayList<EmailAddress> email) {
 		this.email = email;
 	}
 }
