@@ -14,9 +14,9 @@ import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gwt.core.client.GWT;
 import com.norex.gtrax.client.auth.ClientAuth;
 import com.norex.gtrax.client.auth.ClientCompany;
-import com.norex.gtrax.client.auth.ClientContact;
 import com.norex.gtrax.client.auth.CompanyService;
 import com.norex.gtrax.client.auth.NotLoggedInException;
+import com.norex.gtrax.client.contact.ClientContact;
 
 public class CompanyServiceImpl extends GeneralServiceImpl implements
 		CompanyService {

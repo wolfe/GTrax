@@ -21,7 +21,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.norex.gtrax.client.ViewInterface;
-import com.norex.gtrax.client.auth.ClientContact;
 import com.norex.gtrax.client.auth.CompanyService;
 import com.norex.gtrax.client.auth.CompanyServiceAsync;
 

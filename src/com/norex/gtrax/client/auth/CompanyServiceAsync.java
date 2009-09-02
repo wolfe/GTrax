@@ -3,6 +3,7 @@ package com.norex.gtrax.client.auth;
 import java.util.ArrayList;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.norex.gtrax.client.contact.ClientContact;
 
 public interface CompanyServiceAsync  {
 	public void create(ClientCompany m, AsyncCallback<ClientCompany> async);

@@ -10,8 +10,9 @@ import javax.jdo.annotations.PrimaryKey;
 
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
-import com.norex.gtrax.client.auth.ClientContact;
+import com.norex.gtrax.client.contact.ClientContact;
 import com.norex.gtrax.client.contact.EmailAddress;
+import com.norex.gtrax.client.contact.PhoneNumber;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class Contact extends Model {
@@ -25,6 +26,9 @@ public class Contact extends Model {
 	
 	@Persistent(serialized = "true")
 	protected ArrayList<EmailAddress> email = new ArrayList<EmailAddress>();
+	
+	@Persistent(serialized = "true")
+	protected ArrayList<PhoneNumber> phone = new ArrayList<PhoneNumber>();
 	
 	@Persistent
 	protected Company company;
@@ -61,8 +65,17 @@ public class Contact extends Model {
 		this.email = email;
 	}
 	
+	public ArrayList<PhoneNumber> getPhone() {
+		return phone;
+	}
+
+	public void setPhone(ArrayList<PhoneNumber> phone) {
+		this.phone = phone;
+	}
+
 	public void update(ClientContact contact) {
 		this.setEmail(contact.getEmail());
+		this.setPhone(contact.getPhone());
 		this.setName(contact.getName());
 	}
 	
@@ -70,6 +83,7 @@ public class Contact extends Model {
 		ClientContact tmp = new ClientContact();
 		tmp.setName(this.getName());
 		tmp.setEmail(this.getEmail());
+		tmp.setPhone(this.getPhone());
 		tmp.setId(KeyFactory.keyToString(this.getId()));
 		
 		return tmp;

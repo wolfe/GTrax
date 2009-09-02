@@ -24,17 +24,18 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.norex.gtrax.client.auth.ClientContact;
 
 public class ContactWidget extends Composite {
 	
 	private VerticalPanel container = new VerticalPanel();
 	private VerticalPanel emailCollectionContainer = new VerticalPanel();
+	private VerticalPanel phoneCollectionContainer = new VerticalPanel();
 	private TextBox name = new TextBox();
 	
 	private ClientContact contact = new ClientContact();
 
 	private Map<TextBox, EmailAddress> addressMap = new HashMap<TextBox, EmailAddress>();
+	private Map<TextBox, PhoneNumber> phoneMap = new HashMap<TextBox, PhoneNumber>();
 	
 	public ContactWidget(ClientContact c) {
 		initWidget(container);
@@ -59,16 +60,32 @@ public class ContactWidget extends Composite {
 			addEmailField(address);
 		}
 		
-		addEmailField(new EmailAddress());
-		Anchor addAnother = new Anchor("add another");
-		addAnother.addClickHandler(new ClickHandler() {
+		Anchor addAnotherEmail = new Anchor("add another");
+		addAnotherEmail.addClickHandler(new ClickHandler() {
 			
 			@Override
 			public void onClick(ClickEvent event) {
 				addEmailField(new EmailAddress());
 			}
 		});
-		container.add(addAnother);
+		container.add(addAnotherEmail);
+		
+		
+		container.add(new Label("Phone Numbers:"));
+		container.add(phoneCollectionContainer);
+		
+		for (PhoneNumber phonenumber : c.getPhone()) {
+			addPhoneField(phonenumber);
+		}
+		Anchor addAnotherPhone = new Anchor("add another");
+		addAnotherPhone.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				addPhoneField(new PhoneNumber());
+			}
+		});
+		container.add(addAnotherPhone);
 	}
 	
 	public ClientContact getContact() {
@@ -79,6 +96,14 @@ public class ContactWidget extends Composite {
 			}
 		}
 		this.contact.setEmail(list);
+		
+		ArrayList<PhoneNumber> phones = new ArrayList<PhoneNumber>();
+		for (TextBox sets : phoneMap.keySet()) {
+			if (!sets.getValue().trim().isEmpty()) {
+				phones.add(phoneMap.get(sets));
+			}
+		}
+		this.contact.setPhone(phones);
 		
 		return this.contact;
 	}
@@ -139,4 +164,56 @@ public class ContactWidget extends Composite {
 		emailCollectionContainer.add(emailContainer);
 	}
 	
+	private void addPhoneField(final PhoneNumber phonenumber) {
+		final HorizontalPanel phoneContainer = new HorizontalPanel();
+		
+		final TextBox phone = new TextBox();
+		phone.setValue(phonenumber.getNumber());
+		
+		phoneMap.put(phone, phonenumber);
+		
+		phone.addValueChangeHandler(new ValueChangeHandler<String>() {
+
+			@Override
+			public void onValueChange(ValueChangeEvent<String> event) {
+				phonenumber.setNumber(phone.getValue());
+			}
+		});
+		
+		phoneContainer.add(phone);
+		
+		final ListBox types = new ListBox();
+		
+		phoneContainer.add(types);
+		
+		for (PhoneNumberTypes t : PhoneNumberTypes.values()) {
+			types.addItem(t.name());
+			
+			if (t.equals(phonenumber.getType())) {
+				types.setSelectedIndex(types.getItemCount() - 1);
+			}
+		}
+		
+		types.addChangeHandler(new ChangeHandler() {
+			
+			@Override
+			public void onChange(ChangeEvent event) {
+				phonenumber.setType(PhoneNumberTypes.valueOf(types.getValue(types.getSelectedIndex())));
+			}
+		});
+		
+		Button x = new Button("x");
+		x.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				phoneContainer.removeFromParent();
+				phoneMap.remove(phone);
+			}
+		});
+		
+		phoneContainer.add(x);
+		
+		phoneCollectionContainer.add(phoneContainer);
+	}
 }

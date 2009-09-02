@@ -9,8 +9,8 @@ import javax.jdo.Query;
 import com.norex.gtrax.client.auth.AuthService;
 import com.norex.gtrax.client.auth.ClientAuth;
 import com.norex.gtrax.client.auth.ClientCompany;
-import com.norex.gtrax.client.auth.ClientContact;
 import com.norex.gtrax.client.auth.NotLoggedInException;
+import com.norex.gtrax.client.contact.ClientContact;
 import com.norex.gtrax.client.contact.ContactService;
 
 public class ContactServiceImpl extends GeneralServiceImpl implements
