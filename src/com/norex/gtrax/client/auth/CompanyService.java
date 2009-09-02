@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.norex.gtrax.client.contact.ClientContact;
+import com.norex.gtrax.client.group.ClientGroup;
 
 @RemoteServiceRelativePath("company")
 public interface CompanyService extends RemoteService {
@@ -15,4 +16,6 @@ public interface CompanyService extends RemoteService {
     public ArrayList<ClientAuth> getAuthMembers(ClientCompany m);
     public ArrayList<ClientContact> getContacts();
     public ClientAuth login(String url) throws NotLoggedInException;
+    public ArrayList<ClientGroup> getGroups();
+    public ClientGroup addGroup(ClientGroup group);
 }

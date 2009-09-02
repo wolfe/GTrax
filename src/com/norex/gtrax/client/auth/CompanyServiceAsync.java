@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.norex.gtrax.client.contact.ClientContact;
+import com.norex.gtrax.client.group.ClientGroup;
 
 public interface CompanyServiceAsync  {
 	public void create(ClientCompany m, AsyncCallback<ClientCompany> async);
@@ -13,4 +14,6 @@ public interface CompanyServiceAsync  {
     public void getAuthMembers(ClientCompany m, AsyncCallback<ArrayList<ClientAuth>> async);
     public void getContacts(AsyncCallback<ArrayList<ClientContact>> asyncCallback);
     public void login(String url, AsyncCallback<ClientAuth> async);
+    public void getGroups(AsyncCallback<ArrayList<ClientGroup>> async);
+    public void addGroup(ClientGroup group, AsyncCallback<ClientGroup> async);
 }

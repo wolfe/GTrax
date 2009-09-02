@@ -17,6 +17,7 @@ import com.norex.gtrax.client.auth.ClientCompany;
 import com.norex.gtrax.client.auth.CompanyService;
 import com.norex.gtrax.client.auth.NotLoggedInException;
 import com.norex.gtrax.client.contact.ClientContact;
+import com.norex.gtrax.client.group.ClientGroup;
 
 public class CompanyServiceImpl extends GeneralServiceImpl implements
 		CompanyService {
@@ -127,6 +128,37 @@ public class CompanyServiceImpl extends GeneralServiceImpl implements
 			NotLoggedInException e = new NotLoggedInException();
 			e.setLoginURL(userService.createLoginURL(url));
 			throw e;
+		}
+	}
+
+
+	@Override
+	public ArrayList<ClientGroup> getGroups() {
+		try {
+			Company company = AuthServiceImpl.getCurrentCompany();
+			
+			ArrayList<ClientGroup> list = new ArrayList<ClientGroup>();
+			
+			for (Group g : company.getGroupSet()) {
+				list.add(g.toClient());
+			}
+			return list;
+		} catch (NotLoggedInException e) {
+			return null;
+		}
+	}
+
+
+	@Override
+	public ClientGroup addGroup(ClientGroup group) {
+		try {
+			Company c = AuthServiceImpl.getCurrentCompany();
+			Group g = new Group();
+			g.update(group);
+			c.getGroupSet().add(g);
+			return g.toClient();
+		} catch (NotLoggedInException e) {
+			return null;
 		}
 	}
 	

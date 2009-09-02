@@ -40,5 +40,14 @@
     <url-pattern>/gtrax/contact</url-pattern>
   </servlet-mapping>
   
+  <servlet>
+    <servlet-name>fileUploaderServlet</servlet-name>
+    <servlet-class>com.norex.gtrax.server.FileUpload</servlet-class>
+</servlet>
+<servlet-mapping>
+  <servlet-name>fileUploaderServlet</servlet-name>
+  <url-pattern>/gtrax/fileupload</url-pattern>
+</servlet-mapping>
+  
   
 </web-app>

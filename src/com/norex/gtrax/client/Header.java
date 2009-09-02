@@ -12,6 +12,7 @@ import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.resources.client.ImageResource.ImageOptions;
 import com.google.gwt.resources.client.ImageResource.RepeatStyle;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
@@ -24,12 +25,12 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.norex.gtrax.client.auth.ClientAuth;
-import com.norex.gtrax.client.auth.ClientCompany;
 import com.norex.gtrax.client.auth.CompanyService;
 import com.norex.gtrax.client.auth.CompanyServiceAsync;
 import com.norex.gtrax.client.auth.Main;
 import com.norex.gtrax.client.auth.NotLoggedInException;
 import com.norex.gtrax.client.contact.ContactView;
+import com.norex.gtrax.client.group.GroupView;
 
 public class Header {
 	
@@ -99,12 +100,15 @@ public class Header {
 				
 				//addViewInterface("Companies", new Main());
 				addViewInterface("Contacts", new ContactView());
+				addViewInterface("Groups", new GroupView());
+				
+				History.fireCurrentHistoryState();
 			}
 			
 			@Override
-			public void onFailure(Throwable caught) {
+			public void onFailure(final Throwable caught) {
 				if (caught instanceof NotLoggedInException) {
-					//Window.Location.replace(((NotLoggedInException) caught).getLoginURL());
+					Window.Location.replace(((NotLoggedInException) caught).getLoginURL());
 				}
 			}
 		});

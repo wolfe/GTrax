@@ -30,6 +30,9 @@ public class Company extends Model {
 	
 	@Persistent(mappedBy="company")
 	protected ArrayList<Contact> contactSet = new ArrayList<Contact>();
+	
+	@Persistent(mappedBy="company")
+	protected ArrayList<Group> groupSet = new ArrayList<Group>();
 
 	public void setId(Key id) {
 		this.id = id;
@@ -61,6 +64,14 @@ public class Company extends Model {
 
 	public void setContactSet(ArrayList<Contact> contactSet) {
 		this.contactSet = contactSet;
+	}
+
+	public synchronized ArrayList<Group> getGroupSet() {
+		return groupSet;
+	}
+
+	public synchronized void setGroupSet(ArrayList<Group> groupSet) {
+		this.groupSet = groupSet;
 	}
 
 	public ClientCompany toClient() {
