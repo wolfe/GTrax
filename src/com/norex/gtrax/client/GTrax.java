@@ -11,48 +11,59 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.StyleInjector;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class GTrax implements EntryPoint {
-    final static Resources resources = Resources.INSTANCE;
+	final static Resources resources = Resources.INSTANCE;
 
-    interface SiteCSS extends CssResource {
-	String logo();
-    }
+	interface SiteCSS extends CssResource {
+		String logo();
+	}
 
-    interface Resources extends ClientBundle {
-	public static final Resources INSTANCE = GWT.create(Resources.class);
+	interface Resources extends ClientBundle {
+		public static final Resources INSTANCE = GWT.create(Resources.class);
 
-	@Source("site.css")
-	@Strict
-	SiteCSS css();
+		@Source("site.css")
+		@Strict
+		SiteCSS css();
 
-	@ImageOptions(repeatStyle = RepeatStyle.None)
-	@Source("logo.png")
-	ImageResource logo();
+		@ImageOptions(repeatStyle = RepeatStyle.None)
+		@Source("logo.png")
+		ImageResource logo();
 
-    }
-
-    /**
-     * This is the entry point method.
-     */
-    public void onModuleLoad() {
-	StyleInjector.injectStylesheet(resources.css().getText());
-
-	Header header = new Header();
-	RootPanel.get().clear();
-	RootPanel.get("header").add(header.getHeader());
+	}
 	
-	History.addValueChangeHandler(header.historyHandler);
-	History.fireCurrentHistoryState();
-	
+	private static Panel content = null;
 
-    }
-    public static native void redirect(String url)/*-{
-        	$wnd.location = url;
-    	}-*/;
+	/**
+	 * This is the entry point method.
+	 */
+	public void onModuleLoad() {
+		StyleInjector.injectStylesheet(resources.css().getText());
+
+		Header header = new Header();
+		RootPanel.get().clear();
+		RootPanel.get("header").add(header.getHeader());
+
+		History.addValueChangeHandler(header.historyHandler);
+		History.fireCurrentHistoryState();
+
+	}
+
+	public static native void redirect(String url)/*-{
+		$wnd.location = url;
+	}-*/;
+
+	public static void setContent(Panel content) {
+		GTrax.content = content;
+	}
+
+	public static Panel getContent() {
+		return GTrax.content;
+	}
 
 }

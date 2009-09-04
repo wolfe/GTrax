@@ -32,6 +32,9 @@ public class Contact extends Model {
 	
 	@Persistent
 	protected Company company;
+	
+	@Persistent
+	protected Key picture;
 
 	public Key getId() {
 		return id;
@@ -72,11 +75,23 @@ public class Contact extends Model {
 	public void setPhone(ArrayList<PhoneNumber> phone) {
 		this.phone = phone;
 	}
+	
+	public Key getPicture() {
+		return this.picture;
+	}
+	
+	public void setPicture(Key pic) {
+		this.picture = pic;
+	}
 
 	public void update(ClientContact contact) {
 		this.setEmail(contact.getEmail());
 		this.setPhone(contact.getPhone());
 		this.setName(contact.getName());
+		
+		if (contact.getPictureBlobKey() != null) {
+			this.setPicture(KeyFactory.stringToKey(contact.getPictureBlobKey()));
+		}
 	}
 	
 	public ClientContact toClient() {
@@ -85,6 +100,10 @@ public class Contact extends Model {
 		tmp.setEmail(this.getEmail());
 		tmp.setPhone(this.getPhone());
 		tmp.setId(KeyFactory.keyToString(this.getId()));
+		
+		if (this.getPicture() != null) {
+			tmp.setPictureBlobKey(KeyFactory.keyToString(this.getPicture()));
+		}
 		
 		return tmp;
 	}

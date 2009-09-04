@@ -15,15 +15,22 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FileUpload;
+import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Hyperlink;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
+import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteHandler;
+import com.norex.gtrax.client.BlobImage;
 
 public class ContactWidget extends Composite {
 	
@@ -41,6 +48,53 @@ public class ContactWidget extends Composite {
 		initWidget(container);
 		
 		this.setContact(c);
+		
+		final BlobImage picture = new BlobImage(c.getPictureBlobKey(), 165);
+		container.add(picture);
+		
+		final FormPanel pictureUploadForm = new FormPanel();
+		pictureUploadForm.setAction(GWT.getModuleBaseURL() + "fileupload");
+		pictureUploadForm.setMethod(FormPanel.METHOD_POST);
+		pictureUploadForm.setEncoding(FormPanel.ENCODING_MULTIPART);
+		
+		FileUpload pictureUpload = new FileUpload();
+		pictureUpload.setName("picture_" + getContact().getId());
+		
+		pictureUploadForm.addSubmitCompleteHandler(new SubmitCompleteHandler() {
+			
+			@Override
+			public void onSubmitComplete(SubmitCompleteEvent event) {
+				ClientContact c = getContact();
+				c.setPictureBlobKey(event.getResults().trim().replaceAll("\\<.*?>",""));
+				ContactServiceAsync contactService = GWT.create(ContactService.class);
+				contactService.save(c, new AsyncCallback<ClientContact>() {
+					
+					@Override
+					public void onSuccess(ClientContact result) {
+						setContact(result);
+						picture.setUrl(result.getPictureBlobKey());
+					}
+					
+					@Override
+					public void onFailure(Throwable caught) {
+						// TODO Auto-generated method stub
+						
+					}
+				});
+			}
+		});
+		
+		pictureUploadForm.add(pictureUpload);
+		container.add(pictureUploadForm);
+		
+		Button x = new Button("save pic", new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				pictureUploadForm.submit();
+			}
+		});
+		container.add(x);
 		
 		container.add(new Label("Full Name:"));
 		container.add(name);
@@ -89,21 +143,21 @@ public class ContactWidget extends Composite {
 	}
 	
 	public ClientContact getContact() {
-		ArrayList<EmailAddress> list = new ArrayList<EmailAddress>();
-		for (TextBox sets : addressMap.keySet()) {
-			if (!sets.getValue().trim().isEmpty()) {
-				list.add(addressMap.get(sets));
-			}
-		}
-		this.contact.setEmail(list);
-		
-		ArrayList<PhoneNumber> phones = new ArrayList<PhoneNumber>();
-		for (TextBox sets : phoneMap.keySet()) {
-			if (!sets.getValue().trim().isEmpty()) {
-				phones.add(phoneMap.get(sets));
-			}
-		}
-		this.contact.setPhone(phones);
+//		ArrayList<EmailAddress> list = new ArrayList<EmailAddress>();
+//		for (TextBox sets : addressMap.keySet()) {
+//			if (!sets.getValue().trim().isEmpty()) {
+//				list.add(addressMap.get(sets));
+//			}
+//		}
+//		this.contact.setEmail(list);
+//		
+//		ArrayList<PhoneNumber> phones = new ArrayList<PhoneNumber>();
+//		for (TextBox sets : phoneMap.keySet()) {
+//			if (!sets.getValue().trim().isEmpty()) {
+//				phones.add(phoneMap.get(sets));
+//			}
+//		}
+//		this.contact.setPhone(phones);
 		
 		return this.contact;
 	}
@@ -125,6 +179,14 @@ public class ContactWidget extends Composite {
 			@Override
 			public void onValueChange(ValueChangeEvent<String> event) {
 				address.setAddress(emailAddress.getValue());
+				
+				ArrayList<EmailAddress> list = new ArrayList<EmailAddress>();
+				for (TextBox sets : addressMap.keySet()) {
+					if (!sets.getValue().trim().isEmpty()) {
+						list.add(addressMap.get(sets));
+					}
+				}
+				contact.setEmail(list);
 			}
 		});
 		
@@ -177,6 +239,14 @@ public class ContactWidget extends Composite {
 			@Override
 			public void onValueChange(ValueChangeEvent<String> event) {
 				phonenumber.setNumber(phone.getValue());
+				
+				ArrayList<PhoneNumber> phones = new ArrayList<PhoneNumber>();
+				for (TextBox sets : phoneMap.keySet()) {
+					if (!sets.getValue().trim().isEmpty()) {
+						phones.add(phoneMap.get(sets));
+					}
+				}
+				contact.setPhone(phones);
 			}
 		});
 		

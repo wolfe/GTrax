@@ -1,15 +1,20 @@
-<!-- Indices written at Wed, 2 Sep 2009 21:47:26 UTC -->
+<!-- Indices written at Fri, 4 Sep 2009 21:00:15 UTC -->
 
 <datastore-indexes>
 
-    <!-- Used 2 times in query history -->
-    <datastore-index kind="Group" ancestor="true" source="auto">
-        <property name="groupSet_INTEGER_IDX" direction="asc"/>
-    </datastore-index>
-
-    <!-- Used 1 time in query history -->
+    <!-- Used 3 times in query history -->
     <datastore-index kind="Contact" ancestor="true" source="auto">
         <property name="contactSet_INTEGER_IDX" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Auth" ancestor="true" source="auto">
+        <property name="authSet_INTEGER_IDX" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 3 times in query history -->
+    <datastore-index kind="Group" ancestor="true" source="auto">
+        <property name="groupSet_INTEGER_IDX" direction="asc"/>
     </datastore-index>
 
 </datastore-indexes>

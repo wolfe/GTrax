@@ -22,35 +22,35 @@ public class GroupWidget extends Composite {
 	public GroupWidget(ClientGroup group) {
 		container.add(new Label(group.getName()));
 		
-		final FormPanel form = new FormPanel();
-		form.setAction(GWT.getModuleBaseURL() + "fileupload");
-		form.setMethod(FormPanel.METHOD_POST);
-		form.setEncoding(FormPanel.ENCODING_MULTIPART);
-		
-		form.addSubmitCompleteHandler(new SubmitCompleteHandler() {
-			
-			@Override
-			public void onSubmitComplete(SubmitCompleteEvent event) {
-				Window.alert(event.getResults());
-				String results = event.getResults();
-			}
-		});
-		
-		FileUpload file = new FileUpload();
-		file.setName("imageupload");
-		
-		form.add(file);
-		container.add(form);
-		
-		Button b = new Button("submit");
-		b.addClickHandler(new ClickHandler() {
-			
-			@Override
-			public void onClick(ClickEvent event) {
-				form.submit();
-			}
-		});
-		container.add(b);
+//		final FormPanel form = new FormPanel();
+//		form.setAction(GWT.getModuleBaseURL() + "fileupload");
+//		form.setMethod(FormPanel.METHOD_POST);
+//		form.setEncoding(FormPanel.ENCODING_MULTIPART);
+//		
+//		form.addSubmitCompleteHandler(new SubmitCompleteHandler() {
+//			
+//			@Override
+//			public void onSubmitComplete(SubmitCompleteEvent event) {
+//				Window.alert(event.getResults());
+//				String results = event.getResults();
+//			}
+//		});
+//		
+//		FileUpload file = new FileUpload();
+//		file.setName("imageupload");
+//		
+//		form.add(file);
+//		container.add(form);
+//		
+//		Button b = new Button("submit");
+//		b.addClickHandler(new ClickHandler() {
+//			
+//			@Override
+//			public void onClick(ClickEvent event) {
+//				form.submit();
+//			}
+//		});
+//		container.add(b);
 		
 		initWidget(container);
 	}

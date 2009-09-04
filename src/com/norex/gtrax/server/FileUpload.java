@@ -39,7 +39,7 @@ public class FileUpload extends HttpServlet {
                     out.write(buffer, 0, len);
                 }
 
-                int maxFileSize = 10*(1024*2); //10 megs max 
+                int maxFileSize = 10*(1024 * 1024); //10 megs max 
                 if (out.size() > maxFileSize) { 
                     System.out.println("File is > than " + maxFileSize);
                     return;
@@ -57,7 +57,7 @@ public class FileUpload extends HttpServlet {
                 pm.close();
                 
                 response.setContentType("text/plain");
-                output.write(KeyFactory.keyToString(blob.getId()));
+                output.print(KeyFactory.keyToString(blob.getId()));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

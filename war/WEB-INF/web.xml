@@ -48,6 +48,15 @@
   <servlet-name>fileUploaderServlet</servlet-name>
   <url-pattern>/gtrax/fileupload</url-pattern>
 </servlet-mapping>
+
+<servlet>
+    <servlet-name>blobRenderServlet</servlet-name>
+    <servlet-class>com.norex.gtrax.server.BlobRender</servlet-class>
+</servlet>
+<servlet-mapping>
+  <servlet-name>blobRenderServlet</servlet-name>
+  <url-pattern>/gtrax/blobrender</url-pattern>
+</servlet-mapping>
   
   
 </web-app>

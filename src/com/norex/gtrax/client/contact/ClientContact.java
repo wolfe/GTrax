@@ -11,6 +11,8 @@ public class ClientContact extends ClientModel {
 	protected ArrayList<EmailAddress> email = new ArrayList<EmailAddress>();
 	protected ArrayList<PhoneNumber> phone = new ArrayList<PhoneNumber>();
 	protected ClientCompany company;
+	protected String pictureBlobKey;
+	
 	public ClientCompany getCompany() {
 		return company;
 	}
@@ -40,5 +42,11 @@ public class ClientContact extends ClientModel {
 	}
 	public void setPhone(ArrayList<PhoneNumber> phones) {
 		this.phone = phones;
+	}
+	public String getPictureBlobKey() {
+		return pictureBlobKey;
+	}
+	public void setPictureBlobKey(String pictureBlobKey) {
+		this.pictureBlobKey = pictureBlobKey;
 	}
 }

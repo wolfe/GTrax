@@ -16,6 +16,7 @@ import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Hyperlink;
@@ -31,6 +32,7 @@ import com.norex.gtrax.client.auth.Main;
 import com.norex.gtrax.client.auth.NotLoggedInException;
 import com.norex.gtrax.client.contact.ContactView;
 import com.norex.gtrax.client.group.GroupView;
+import com.norex.gtrax.server.Contact;
 
 public class Header {
 	
@@ -68,7 +70,9 @@ public class Header {
     /**
      * A mapping of menu items to the widget display when the item is selected.
      */
-    private Map<Hyperlink, ViewInterface> itemWidgets = new HashMap<Hyperlink, ViewInterface>();
+    private HashMap<Hyperlink, ViewInterface> itemWidgets = new HashMap<Hyperlink, ViewInterface>();
+    
+    private HashMap<ViewInterface, Panel> itemContent = new HashMap<ViewInterface, Panel>();
 
     final DockPanel header = new DockPanel();
     HorizontalPanel menu = new HorizontalPanel();
@@ -108,7 +112,8 @@ public class Header {
 			@Override
 			public void onFailure(final Throwable caught) {
 				if (caught instanceof NotLoggedInException) {
-					Window.Location.replace(((NotLoggedInException) caught).getLoginURL());
+					Anchor a = new Anchor("Login", ((NotLoggedInException) caught).getLoginURL());
+					login.add(a);
 				}
 			}
 		});
@@ -122,8 +127,16 @@ public class Header {
 				if (item == null) {
 					return;
 				}
-				//ViewInterface i = GWT.create(itemWidgets.get(item));
-				RootPanel.get("content").add(itemWidgets.get(item).getView());
+				ViewInterface i = itemWidgets.get(item);
+				
+				if (itemContent.containsKey(i)) {
+					RootPanel.get("content").add(itemContent.get(i));
+				} else {
+					Panel view = i.getView();
+					itemContent.put(i, view);
+					RootPanel.get("content").add(view);
+				}
+				
 		    }
 		};
     }
@@ -133,12 +146,12 @@ public class Header {
     	return header;
     }
 
-    public void addViewInterface(String text, ViewInterface cls) {
-		String token = getWidgetToken(cls);
+    public void addViewInterface(String text, ViewInterface viewInterface) {
+		String token = getWidgetToken(viewInterface);
 	
 		Hyperlink widget = new Hyperlink(text, token);
 	
-		itemWidgets.put(widget, cls);
+		itemWidgets.put(widget, viewInterface);
 		itemTokens.put(token, widget);
 	
 		this.addMenuItem(widget);
