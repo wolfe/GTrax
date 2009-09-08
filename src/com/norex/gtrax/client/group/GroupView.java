@@ -83,4 +83,10 @@ public class GroupView implements ViewInterface {
 	public void addGroupToList(ClientGroup group) {
 		groupsContainer.add(new GroupWidget(group));
 	}
+
+	@Override
+	public void updateFromDataSource() {
+		// TODO Auto-generated method stub
+		
+	}
 }

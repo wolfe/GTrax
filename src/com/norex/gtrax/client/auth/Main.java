@@ -150,4 +150,9 @@ public class Main implements ViewInterface {
     	w.add(new AuthWidget(a));
     }
 
+	public void updateFromDataSource() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

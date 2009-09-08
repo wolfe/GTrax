@@ -13,6 +13,7 @@ import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.resources.client.ImageResource.ImageOptions;
 import com.google.gwt.resources.client.ImageResource.RepeatStyle;
 import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
@@ -32,7 +33,6 @@ import com.norex.gtrax.client.auth.Main;
 import com.norex.gtrax.client.auth.NotLoggedInException;
 import com.norex.gtrax.client.contact.ContactView;
 import com.norex.gtrax.client.group.GroupView;
-import com.norex.gtrax.server.Contact;
 
 public class Header {
 	
@@ -130,6 +130,7 @@ public class Header {
 				ViewInterface i = itemWidgets.get(item);
 				
 				if (itemContent.containsKey(i)) {
+					i.updateFromDataSource();
 					RootPanel.get("content").add(itemContent.get(i));
 				} else {
 					Panel view = i.getView();
@@ -139,6 +140,16 @@ public class Header {
 				
 		    }
 		};
+		
+		Timer t = new Timer() {
+			
+			@Override
+			public void run() {
+				//Window.alert(History.getToken());
+				itemWidgets.get(itemTokens.get(History.getToken())).updateFromDataSource();
+			}
+		};
+		t.scheduleRepeating(15000);
     }
     
     

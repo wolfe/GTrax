@@ -10,6 +10,7 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.StyleInjector;
 import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -51,7 +52,7 @@ public class GTrax implements EntryPoint {
 
 		History.addValueChangeHandler(header.historyHandler);
 		History.fireCurrentHistoryState();
-
+		
 	}
 
 	public static native void redirect(String url)/*-{

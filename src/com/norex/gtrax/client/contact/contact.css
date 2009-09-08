@@ -3,3 +3,29 @@
 	width: 100%;
 	padding: 4px;
 }
+
+.contactWidget {
+	padding: 4px;
+}
+
+.nodeLabel {
+	font-weight: bold;
+}
+
+.nodeContainer {
+	padding-top: 15px;
+}
+
+.nodeContainer td {
+	padding-right: 8px;
+}
+
+.addNew, .removeItem {
+	font-size: 10px;
+	text-decoration: underline;
+}
+
+.elementsContainer td {
+	padding-right: 8px;
+	padding-bottom: 1px;
+}

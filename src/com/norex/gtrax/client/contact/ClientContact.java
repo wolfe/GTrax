@@ -10,6 +10,7 @@ public class ClientContact extends ClientModel {
 	protected String name;
 	protected ArrayList<EmailAddress> email = new ArrayList<EmailAddress>();
 	protected ArrayList<PhoneNumber> phone = new ArrayList<PhoneNumber>();
+	private ArrayList<Website> website = new ArrayList<Website>();
 	protected ClientCompany company;
 	protected String pictureBlobKey;
 	
@@ -48,5 +49,11 @@ public class ClientContact extends ClientModel {
 	}
 	public void setPictureBlobKey(String pictureBlobKey) {
 		this.pictureBlobKey = pictureBlobKey;
+	}
+	public void setWebsite(ArrayList<Website> website) {
+		this.website = website;
+	}
+	public ArrayList<Website> getWebsite() {
+		return website;
 	}
 }

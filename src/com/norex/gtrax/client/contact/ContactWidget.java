@@ -1,104 +1,93 @@
 package com.norex.gtrax.client.contact;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.StyleInjector;
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.resources.client.ClientBundle;
-import com.google.gwt.resources.client.CssResource;
-import com.google.gwt.user.client.Window;
+import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteHandler;
-import com.norex.gtrax.client.BlobImage;
+import com.norex.gtrax.client.contact.EmailWidget;
+import com.norex.gtrax.client.contact.WebsiteWidget;
+import com.norex.gtrax.client.contact.PhoneWidget;
 
 public class ContactWidget extends Composite {
-	
-	private VerticalPanel container = new VerticalPanel();
-	private VerticalPanel emailCollectionContainer = new VerticalPanel();
-	private VerticalPanel phoneCollectionContainer = new VerticalPanel();
-	private TextBox name = new TextBox();
-	
-	private ClientContact contact = new ClientContact();
 
-	private Map<TextBox, EmailAddress> addressMap = new HashMap<TextBox, EmailAddress>();
-	private Map<TextBox, PhoneNumber> phoneMap = new HashMap<TextBox, PhoneNumber>();
+	private ClientContact contact;
 	
-	public ContactWidget(ClientContact c) {
-		initWidget(container);
+	interface MyUiBinder extends UiBinder<Widget, ContactWidget> {
+	}
+	
+	interface ContactWidgetImages extends ClientBundle {
+		public ContactWidgetImages INSTANCE = GWT.create(ContactWidgetImages.class);
 		
-		this.setContact(c);
+		@Source("NoPicture.gif")
+		ImageResource noPicture();
+	}
+
+	private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
+	
+	@UiField
+	HorizontalPanel container;
+	
+	@UiField
+	TextBox name;
+	
+	@UiField
+	VerticalPanel emailaddresses;
+	
+	@UiField
+	Anchor addNewEmail;
+	
+	@UiField
+	VerticalPanel phonenumbers;
+	
+	@UiField
+	Anchor addNewPhone;
+	
+	@UiField
+	VerticalPanel websites;
+	
+	@UiField
+	Anchor addWebsite;
+	
+	@UiField 
+	Image contactImage;
+	
+	@UiField
+	VerticalPanel leftCol;
+	
+	@UiField
+	VerticalPanel rightCol;
+	
+	public ContactWidget(final ClientContact contact) {
+		this.setContact(contact);
 		
-		final BlobImage picture = new BlobImage(c.getPictureBlobKey(), 165);
-		container.add(picture);
+		initWidget(uiBinder.createAndBindUi(this));
 		
-		final FormPanel pictureUploadForm = new FormPanel();
-		pictureUploadForm.setAction(GWT.getModuleBaseURL() + "fileupload");
-		pictureUploadForm.setMethod(FormPanel.METHOD_POST);
-		pictureUploadForm.setEncoding(FormPanel.ENCODING_MULTIPART);
+		container.setWidth("100%");
 		
-		FileUpload pictureUpload = new FileUpload();
-		pictureUpload.setName("picture_" + getContact().getId());
+		name.setValue(contact.getName());
 		
-		pictureUploadForm.addSubmitCompleteHandler(new SubmitCompleteHandler() {
-			
-			@Override
-			public void onSubmitComplete(SubmitCompleteEvent event) {
-				ClientContact c = getContact();
-				c.setPictureBlobKey(event.getResults().trim().replaceAll("\\<.*?>",""));
-				ContactServiceAsync contactService = GWT.create(ContactService.class);
-				contactService.save(c, new AsyncCallback<ClientContact>() {
-					
-					@Override
-					public void onSuccess(ClientContact result) {
-						setContact(result);
-						picture.setUrl(result.getPictureBlobKey());
-					}
-					
-					@Override
-					public void onFailure(Throwable caught) {
-						// TODO Auto-generated method stub
-						
-					}
-				});
-			}
-		});
-		
-		pictureUploadForm.add(pictureUpload);
-		container.add(pictureUploadForm);
-		
-		Button x = new Button("save pic", new ClickHandler() {
-			
-			@Override
-			public void onClick(ClickEvent event) {
-				pictureUploadForm.submit();
-			}
-		});
-		container.add(x);
-		
-		container.add(new Label("Full Name:"));
-		container.add(name);
-		name.setValue(c.getName());
 		name.addValueChangeHandler(new ValueChangeHandler<String>() {
 			
 			@Override
@@ -107,183 +96,202 @@ public class ContactWidget extends Composite {
 			}
 		});
 		
-		container.add(new Label("Email Addresses:"));
-		container.add(emailCollectionContainer);
-		
-		for (EmailAddress address : c.getEmail()) {
-			addEmailField(address);
+		if (getContact().getEmail() != null) { 
+			for (EmailAddress e : getContact().getEmail()) {
+				addEmailAddress(e);
+			}
+		} else {
+			getContact().setEmail(new ArrayList<EmailAddress>());
 		}
 		
-		Anchor addAnotherEmail = new Anchor("add another");
-		addAnotherEmail.addClickHandler(new ClickHandler() {
+		addNewEmail.setText("add");
+		addNewEmail.addClickHandler(new ClickHandler() {
 			
 			@Override
 			public void onClick(ClickEvent event) {
-				addEmailField(new EmailAddress());
+				EmailAddress a = new EmailAddress();
+				getContact().getEmail().add(a);
+				addEmailAddress(a);
 			}
 		});
-		container.add(addAnotherEmail);
 		
 		
-		container.add(new Label("Phone Numbers:"));
-		container.add(phoneCollectionContainer);
-		
-		for (PhoneNumber phonenumber : c.getPhone()) {
-			addPhoneField(phonenumber);
+		if (getContact().getPhone() != null) {
+			for (PhoneNumber p : getContact().getPhone()) {
+				addPhone(p);
+			}
+		} else {
+			getContact().setPhone(new ArrayList<PhoneNumber>());
 		}
-		Anchor addAnotherPhone = new Anchor("add another");
-		addAnotherPhone.addClickHandler(new ClickHandler() {
+		
+		addNewPhone.setText("add");
+		addNewPhone.addClickHandler(new ClickHandler() {
 			
 			@Override
 			public void onClick(ClickEvent event) {
-				addPhoneField(new PhoneNumber());
+				PhoneNumber a = new PhoneNumber();
+				getContact().getPhone().add(a);
+				addPhone(a);
 			}
 		});
-		container.add(addAnotherPhone);
+		
+		if (getContact().getWebsite() != null) {
+			for (Website w : getContact().getWebsite()) {
+				addWebsite(w);
+			}
+		} else {
+			getContact().setWebsite(new ArrayList<Website>());
+		}
+		
+		addWebsite.setText("add");
+		addWebsite.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				Website w = new Website();
+				getContact().getWebsite().add(w);
+				addWebsite(w);
+			}
+		});
+		
+		contactImage.setUrl(getBlobImageURL());
+		
+		contactImage.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				final DialogBox popup = new DialogBox();
+				popup.setAnimationEnabled(true);
+				popup.setText("Upload Contact Image");
+				
+				VerticalPanel panel = new VerticalPanel();
+				
+				final FormPanel form = new FormPanel();
+				form.setAction(GWT.getModuleBaseURL() + "fileupload");
+				form.setEncoding(FormPanel.ENCODING_MULTIPART);
+				form.setMethod(FormPanel.METHOD_POST);
+				
+				FileUpload newImage = new FileUpload();
+				newImage.setName("image_" + getContact().getId());
+				form.add(newImage);
+				
+				Button submit = new Button("submit");
+				submit.addClickHandler(new ClickHandler() {
+					
+					@Override
+					public void onClick(ClickEvent event) {
+						form.submit();
+					}
+				});
+				
+				form.addSubmitCompleteHandler(new SubmitCompleteHandler() {
+					
+					@Override
+					public void onSubmitComplete(SubmitCompleteEvent event) {
+						getContact().setPictureBlobKey(event.getResults().trim().replaceAll("\\<.*?>",""));
+						ContactServiceAsync contactService = GWT.create(ContactService.class);
+						contactService.save(getContact(), new AsyncCallback<ClientContact>() {
+							
+							@Override
+							public void onSuccess(ClientContact result) {
+								setContact(result);
+								contactImage.setUrl(getBlobImageURL());
+								popup.hide();
+							}
+							
+							@Override
+							public void onFailure(Throwable caught) {
+								// TODO Auto-generated method stub
+								
+							}
+						});
+					}
+				});
+				panel.add(form);
+				panel.add(submit);
+				
+				Button close = new Button("close", new ClickHandler() {
+					
+					@Override
+					public void onClick(ClickEvent event) {
+						popup.hide();
+					}
+				});
+				panel.add(close);
+				
+				popup.add(panel);
+				popup.center();
+				popup.show();
+			}
+		});
+	}
+	
+	public void addEmailAddress(final EmailAddress email) {
+		final EmailWidget w = new EmailWidget(email);
+		Anchor x = new Anchor("remove");
+		x.setStyleName(ContactView.ContactViewResources.INSTANCE.css().removeItem());
+		x.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				getContact().getEmail().remove(email);
+				w.removeFromParent();
+			}
+		});
+		w.add(x);
+		
+		emailaddresses.add(w);
+	}
+	
+	public void addPhone(final PhoneNumber p) {
+		final PhoneWidget w = new PhoneWidget(p);
+		Anchor x = new Anchor("remove");
+		x.setStyleName(ContactView.ContactViewResources.INSTANCE.css().removeItem());
+		x.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				getContact().getPhone().remove(p);
+				w.removeFromParent();
+			}
+		});
+		w.add(x);
+		
+		phonenumbers.add(w);
+	}
+	
+	public void addWebsite(final Website website) {
+		final WebsiteWidget w = new WebsiteWidget(website);
+		Anchor x = new Anchor("remove");
+		x.setStyleName(ContactView.ContactViewResources.INSTANCE.css().removeItem());
+		x.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				getContact().getWebsite().remove(website);
+				w.removeFromParent();
+			}
+		});
+		w.add(x);
+		
+		websites.add(w);
 	}
 	
 	public ClientContact getContact() {
-//		ArrayList<EmailAddress> list = new ArrayList<EmailAddress>();
-//		for (TextBox sets : addressMap.keySet()) {
-//			if (!sets.getValue().trim().isEmpty()) {
-//				list.add(addressMap.get(sets));
-//			}
-//		}
-//		this.contact.setEmail(list);
-//		
-//		ArrayList<PhoneNumber> phones = new ArrayList<PhoneNumber>();
-//		for (TextBox sets : phoneMap.keySet()) {
-//			if (!sets.getValue().trim().isEmpty()) {
-//				phones.add(phoneMap.get(sets));
-//			}
-//		}
-//		this.contact.setPhone(phones);
-		
 		return this.contact;
 	}
 	
-	public void setContact(ClientContact c) {
-		this.contact = c;
+	public void setContact(ClientContact contact) {
+		this.contact = contact;
 	}
 	
-	private void addEmailField(final EmailAddress address) {
-		final HorizontalPanel emailContainer = new HorizontalPanel();
-		
-		final TextBox emailAddress = new TextBox();
-		emailAddress.setValue(address.getAddress());
-		
-		addressMap.put(emailAddress, address);
-		
-		emailAddress.addValueChangeHandler(new ValueChangeHandler<String>() {
-
-			@Override
-			public void onValueChange(ValueChangeEvent<String> event) {
-				address.setAddress(emailAddress.getValue());
-				
-				ArrayList<EmailAddress> list = new ArrayList<EmailAddress>();
-				for (TextBox sets : addressMap.keySet()) {
-					if (!sets.getValue().trim().isEmpty()) {
-						list.add(addressMap.get(sets));
-					}
-				}
-				contact.setEmail(list);
-			}
-		});
-		
-		final ListBox types = new ListBox();
-		
-		emailContainer.add(emailAddress);
-		emailContainer.add(types);
-		
-		for (EmailAddressType t : EmailAddressType.values()) {
-			types.addItem(t.name());
-			
-			if (t.equals(address.getType())) {
-				types.setSelectedIndex(types.getItemCount() - 1);
-			}
+	public String getBlobImageURL() {
+		if (getContact().getPictureBlobKey() == null) {
+			ImageResource img = ContactWidgetImages.INSTANCE.noPicture();
+			contactImage.setWidth(img.getWidth() + "px");
+			return img.getURL();
 		}
-		
-		types.addChangeHandler(new ChangeHandler() {
-			
-			@Override
-			public void onChange(ChangeEvent event) {
-				address.setType(EmailAddressType.valueOf(types.getValue(types.getSelectedIndex())));
-			}
-		});
-		
-		Button x = new Button("x");
-		x.addClickHandler(new ClickHandler() {
-			
-			@Override
-			public void onClick(ClickEvent event) {
-				emailContainer.removeFromParent();
-				addressMap.remove(emailAddress);
-			}
-		});
-		
-		emailContainer.add(x);
-		
-		emailCollectionContainer.add(emailContainer);
-	}
-	
-	private void addPhoneField(final PhoneNumber phonenumber) {
-		final HorizontalPanel phoneContainer = new HorizontalPanel();
-		
-		final TextBox phone = new TextBox();
-		phone.setValue(phonenumber.getNumber());
-		
-		phoneMap.put(phone, phonenumber);
-		
-		phone.addValueChangeHandler(new ValueChangeHandler<String>() {
-
-			@Override
-			public void onValueChange(ValueChangeEvent<String> event) {
-				phonenumber.setNumber(phone.getValue());
-				
-				ArrayList<PhoneNumber> phones = new ArrayList<PhoneNumber>();
-				for (TextBox sets : phoneMap.keySet()) {
-					if (!sets.getValue().trim().isEmpty()) {
-						phones.add(phoneMap.get(sets));
-					}
-				}
-				contact.setPhone(phones);
-			}
-		});
-		
-		phoneContainer.add(phone);
-		
-		final ListBox types = new ListBox();
-		
-		phoneContainer.add(types);
-		
-		for (PhoneNumberTypes t : PhoneNumberTypes.values()) {
-			types.addItem(t.name());
-			
-			if (t.equals(phonenumber.getType())) {
-				types.setSelectedIndex(types.getItemCount() - 1);
-			}
-		}
-		
-		types.addChangeHandler(new ChangeHandler() {
-			
-			@Override
-			public void onChange(ChangeEvent event) {
-				phonenumber.setType(PhoneNumberTypes.valueOf(types.getValue(types.getSelectedIndex())));
-			}
-		});
-		
-		Button x = new Button("x");
-		x.addClickHandler(new ClickHandler() {
-			
-			@Override
-			public void onClick(ClickEvent event) {
-				phoneContainer.removeFromParent();
-				phoneMap.remove(phone);
-			}
-		});
-		
-		phoneContainer.add(x);
-		
-		phoneCollectionContainer.add(phoneContainer);
+		contactImage.setWidth("160px");
+		return GWT.getModuleBaseURL() + "blobrender?id=" + getContact().getPictureBlobKey() + "&w=" + 160; 
 	}
 }

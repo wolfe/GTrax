@@ -10,8 +10,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
-import com.google.gwt.resources.client.ClientBundle.Source;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DecoratorPanel;
@@ -23,20 +21,27 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.norex.gtrax.client.ViewInterface;
 import com.norex.gtrax.client.auth.CompanyService;
 import com.norex.gtrax.client.auth.CompanyServiceAsync;
+import com.norex.gtrax.client.contact.ContactWidget;
 
 public class ContactView implements ViewInterface {
 	
 	public Map<String, ClientContact> contactsMap = new HashMap<String, ClientContact>();
 	
-	interface ContactViewCSS extends CssResource {
-		String headerFrame();
-	}
-	
-	interface ContactViewResources extends ClientBundle {
+	public interface ContactViewResources extends ClientBundle {
 		public ContactViewResources INSTANCE = GWT.create(ContactViewResources.class);
 		
 		@Source("contact.css")
 		ContactViewCSS css();
+		
+		interface ContactViewCSS extends CssResource {
+			String headerFrame();
+			String contactWidget();
+			String nodeLabel();
+			String nodeContainer();
+			String addNew();
+			String removeItem();
+			String elementsContainer();
+		}
 	}
 	
 	VerticalPanel p = new VerticalPanel();
@@ -57,7 +62,7 @@ public class ContactView implements ViewInterface {
 		
 		DecoratorPanel decPanel = new DecoratorPanel();
 
-		contactPanel.setSize("900px", "350px");
+		contactPanel.setSize("1200px", "550px");
 		contactPanel.setSplitPosition("20%");
 		decPanel.setWidget(contactPanel);
 		p.add(decPanel);
@@ -74,7 +79,6 @@ public class ContactView implements ViewInterface {
 				editContact(new ClientContact());
 			}
 		});
-		
 		contactPanel.setLeftWidget(left);
 		contactPanel.setRightWidget(right);
 		
@@ -84,22 +88,7 @@ public class ContactView implements ViewInterface {
 		left.add(headerFrame);
 		left.add(contactsList);
 		
-		companyService.getContacts(new AsyncCallback<ArrayList<ClientContact>>() {
-
-			@Override
-			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void onSuccess(ArrayList<ClientContact> result) {
-				for (ClientContact contact : result) {
-					contactsMap.put(contact.getId(), contact);
-				}
-				buildList();
-			}
-		});
+		updateFromDataSource();
 		
 		return p;
 	}
@@ -131,6 +120,7 @@ public class ContactView implements ViewInterface {
 		right.clear();
 		
 		final ContactWidget widget = new ContactWidget(contact);
+		widget.setStyleName(ContactViewResources.INSTANCE.css().contactWidget());
 		
 		HorizontalPanel head = new HorizontalPanel();
 		head.addStyleName(ContactViewResources.INSTANCE.css().headerFrame());
@@ -181,5 +171,24 @@ public class ContactView implements ViewInterface {
 		head.add(cancel);
 		
 		right.add(widget);
+	}
+
+	public void updateFromDataSource() {
+		companyService.getContacts(new AsyncCallback<ArrayList<ClientContact>>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onSuccess(ArrayList<ClientContact> result) {
+				for (ClientContact contact : result) {
+					contactsMap.put(contact.getId(), contact);
+				}
+				buildList();
+			}
+		});
 	}
 }

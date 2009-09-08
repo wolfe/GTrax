@@ -46,11 +46,13 @@ com.norex.gtrax.client.auth.ClientAuth, true, true, true, true, com.norex.gtrax.
 com.norex.gtrax.client.auth.ClientCompany, true, true, true, true, com.norex.gtrax.client.auth.ClientCompany/947953739, 947953739
 com.norex.gtrax.client.auth.Company, true, true, true, true, com.norex.gtrax.client.auth.Company/3759393321, 3759393321
 com.norex.gtrax.client.auth.NotLoggedInException, true, true, true, true, com.norex.gtrax.client.auth.NotLoggedInException/1740462277, 1740462277
-com.norex.gtrax.client.contact.ClientContact, true, true, true, true, com.norex.gtrax.client.contact.ClientContact/2930994700, 2930994700
+com.norex.gtrax.client.contact.ClientContact, true, true, true, true, com.norex.gtrax.client.contact.ClientContact/4186979769, 4186979769
 com.norex.gtrax.client.contact.EmailAddress, true, true, true, true, com.norex.gtrax.client.contact.EmailAddress/1507435055, 1507435055
 com.norex.gtrax.client.contact.EmailAddressType, true, true, true, true, com.norex.gtrax.client.contact.EmailAddressType/1535573327, 1535573327
 com.norex.gtrax.client.contact.PhoneNumber, true, true, true, true, com.norex.gtrax.client.contact.PhoneNumber/3389825632, 3389825632
 com.norex.gtrax.client.contact.PhoneNumberTypes, true, true, true, true, com.norex.gtrax.client.contact.PhoneNumberTypes/1690784692, 1690784692
+com.norex.gtrax.client.contact.Website, true, true, true, true, com.norex.gtrax.client.contact.Website/127862133, 127862133
+com.norex.gtrax.client.contact.WebsiteType, true, true, true, true, com.norex.gtrax.client.contact.WebsiteType/2669572170, 2669572170
 com.norex.gtrax.client.group.ClientGroup, true, true, true, true, com.norex.gtrax.client.group.ClientGroup/1663039037, 1663039037
 java.io.IOException, true, true, true, true, java.io.IOException/1159940531, 1159940531
 java.lang.ArithmeticException, true, true, true, true, java.lang.ArithmeticException/1539622151, 1539622151

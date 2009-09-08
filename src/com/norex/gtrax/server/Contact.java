@@ -13,6 +13,7 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.norex.gtrax.client.contact.ClientContact;
 import com.norex.gtrax.client.contact.EmailAddress;
 import com.norex.gtrax.client.contact.PhoneNumber;
+import com.norex.gtrax.client.contact.Website;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class Contact extends Model {
@@ -29,6 +30,9 @@ public class Contact extends Model {
 	
 	@Persistent(serialized = "true")
 	protected ArrayList<PhoneNumber> phone = new ArrayList<PhoneNumber>();
+	
+	@Persistent(serialized = "true")
+	private ArrayList<Website> website = new ArrayList<Website>();
 	
 	@Persistent
 	protected Company company;
@@ -84,10 +88,19 @@ public class Contact extends Model {
 		this.picture = pic;
 	}
 
+	public void setWebsite(ArrayList<Website> website) {
+		this.website = website;
+	}
+
+	public ArrayList<Website> getWebsite() {
+		return website;
+	}
+
 	public void update(ClientContact contact) {
 		this.setEmail(contact.getEmail());
 		this.setPhone(contact.getPhone());
 		this.setName(contact.getName());
+		this.setWebsite(contact.getWebsite());
 		
 		if (contact.getPictureBlobKey() != null) {
 			this.setPicture(KeyFactory.stringToKey(contact.getPictureBlobKey()));
@@ -99,6 +112,7 @@ public class Contact extends Model {
 		tmp.setName(this.getName());
 		tmp.setEmail(this.getEmail());
 		tmp.setPhone(this.getPhone());
+		tmp.setWebsite(this.getWebsite());
 		tmp.setId(KeyFactory.keyToString(this.getId()));
 		
 		if (this.getPicture() != null) {
