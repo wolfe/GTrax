@@ -3,24 +3,17 @@ package com.norex.gtrax.client.contact;
 import java.util.ArrayList;
 
 import com.norex.gtrax.client.ClientModel;
-import com.norex.gtrax.client.auth.ClientCompany;
+import com.norex.gtrax.client.ClientModelInterface;
 
-public class ClientContact extends ClientModel {
+public class ClientContact extends ClientModel implements ContactInterface, ClientModelInterface {
 	protected String id;
 	protected String name;
 	protected ArrayList<EmailAddress> email = new ArrayList<EmailAddress>();
 	protected ArrayList<PhoneNumber> phone = new ArrayList<PhoneNumber>();
 	private ArrayList<Website> website = new ArrayList<Website>();
-	protected ClientCompany company;
 	protected String pictureBlobKey;
 	private String note;
 	
-	public ClientCompany getCompany() {
-		return company;
-	}
-	public void setCompany(ClientCompany company) {
-		this.company = company;
-	}
 	public String getId() {
 		return id;
 	}

@@ -11,12 +11,13 @@ import javax.jdo.annotations.PrimaryKey;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.norex.gtrax.client.contact.ClientContact;
+import com.norex.gtrax.client.contact.ContactInterface;
 import com.norex.gtrax.client.contact.EmailAddress;
 import com.norex.gtrax.client.contact.PhoneNumber;
 import com.norex.gtrax.client.contact.Website;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class Contact extends Model {
+public class Contact extends Model implements ContactInterface, ModelInterface {
 	
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
@@ -38,9 +39,6 @@ public class Contact extends Model {
 	private String note;
 	
 	@Persistent
-	protected Company company;
-	
-	@Persistent
 	protected Key picture;
 
 	public Key getId() {
@@ -57,14 +55,6 @@ public class Contact extends Model {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-	
-	public Company getCompany() {
-		return company;
-	}
-
-	public void setCompany(Company company) {
-		this.company = company;
 	}
 
 	public ArrayList<EmailAddress> getEmail() {

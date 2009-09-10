@@ -6,6 +6,8 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 @RemoteServiceRelativePath("auth")
 public interface AuthService extends RemoteService {
-	public ClientAuth create(ClientCompany c, ClientAuth m);
+	public ClientAuth create(ClientAuth a);
+	public void delete(ClientAuth a);
 	public ClientAuth exchangeAuthSubToken(String token);
+	public ClientAuth login(String url) throws NotLoggedInException;
 }

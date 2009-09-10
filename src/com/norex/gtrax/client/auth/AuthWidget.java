@@ -12,7 +12,7 @@ public class AuthWidget extends Composite {
 	public AuthWidget(ClientAuth a) {
 		this.auth = a;
 		
-		p.add(new Label(a.getEmail()));
+		p.add(new Label(a.getId()));
 		initWidget(p);
 	}
 	

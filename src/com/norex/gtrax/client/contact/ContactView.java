@@ -20,8 +20,6 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.norex.gtrax.client.AsyncRemoteCall;
 import com.norex.gtrax.client.ViewInterface;
-import com.norex.gtrax.client.auth.CompanyService;
-import com.norex.gtrax.client.auth.CompanyServiceAsync;
 import com.norex.gtrax.client.contact.ContactWidget;
 
 public class ContactView implements ViewInterface {
@@ -52,7 +50,6 @@ public class ContactView implements ViewInterface {
 	
 	final VerticalPanel contactsList = new VerticalPanel();
 	
-	CompanyServiceAsync companyService = GWT.create(CompanyService.class);
 	ContactServiceAsync contactService = GWT.create(ContactService.class);
 
 	public Panel getView() {
@@ -167,7 +164,7 @@ public class ContactView implements ViewInterface {
 	}
 
 	public void updateFromDataSource() {
-		companyService.getContacts(new AsyncRemoteCall<ArrayList<ClientContact>>() {
+		contactService.getContacts(new AsyncRemoteCall<ArrayList<ClientContact>>() {
 			public void onSuccess(ArrayList<ClientContact> result) {
 				for (ClientContact contact : result) {
 					contactsMap.put(contact.getId(), contact);

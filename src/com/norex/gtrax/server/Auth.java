@@ -12,30 +12,23 @@ import javax.jdo.annotations.PrimaryKey;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.norex.gtrax.client.auth.ClientAuth;
+import com.norex.gtrax.client.auth.AuthInterface;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class Auth extends Model {
+public class Auth extends Model implements AuthInterface, ModelInterface {
 
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     protected Key id;
 	
 	@Persistent
-	protected String email;
-	
-	@Persistent
-	protected Company company;
+	private String email;
 	
 	@Persistent
 	private String authSubToken;
-
-	public Company getCompany() {
-		return company;
-	}
-
-	public void setCompanySet(Company company) {
-		this.company = company;
-	}
+	
+	@Persistent 
+	private Set<Key> groupSet = new HashSet<Key>();
 
 	public Key getId() {
 		return id;
@@ -44,15 +37,23 @@ public class Auth extends Model {
 	public void setId(Key id) {
 		this.id = id;
 	}
+	
+	public void setGroupSet(Set<Key> groupSet) {
+		this.groupSet = groupSet;
+	}
 
-	public String getEmail() {
-		return email;
+	public Set<Key> getGroupSet() {
+		return groupSet;
 	}
 
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
+
+	public String getEmail() {
+		return email;
+	}
+
 	public void setAuthSubToken(String authSubToken) {
 		this.authSubToken = authSubToken;
 	}
@@ -65,7 +66,7 @@ public class Auth extends Model {
 		ClientAuth tmp = new ClientAuth();
 		
 		tmp.setId(KeyFactory.keyToString(this.getId()));
-		tmp.setEmail(this.getEmail());
+		tmp.setEmail(getEmail());
 		tmp.setAuthSubToken(this.getAuthSubToken());
 		
 		return tmp;

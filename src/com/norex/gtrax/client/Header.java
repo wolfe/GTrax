@@ -15,7 +15,6 @@ import com.google.gwt.resources.client.ImageResource.RepeatStyle;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.DockPanel;
@@ -29,12 +28,9 @@ import com.google.gwt.user.client.ui.Widget;
 import com.norex.gtrax.client.auth.AuthService;
 import com.norex.gtrax.client.auth.AuthServiceAsync;
 import com.norex.gtrax.client.auth.ClientAuth;
-import com.norex.gtrax.client.auth.CompanyService;
-import com.norex.gtrax.client.auth.CompanyServiceAsync;
-import com.norex.gtrax.client.auth.Main;
+import com.norex.gtrax.client.auth.GroupView;
 import com.norex.gtrax.client.auth.NotLoggedInException;
 import com.norex.gtrax.client.contact.ContactView;
-import com.norex.gtrax.client.group.GroupView;
 
 public class Header {
 	
@@ -97,8 +93,8 @@ public class Header {
 		header.add(login, DockPanel.EAST);
 		header.add(menu, DockPanel.EAST);
 		
-		CompanyServiceAsync companyService = GWT.create(CompanyService.class);
-		companyService.login(Window.Location.getHref(), new AsyncRemoteCall<ClientAuth>() {
+		AuthServiceAsync authService = GWT.create(AuthService.class);
+		authService.login(Window.Location.getHref(), new AsyncRemoteCall<ClientAuth>() {
 			
 			@Override
 			public void onSuccess(ClientAuth result) {
@@ -131,8 +127,6 @@ public class Header {
 				}
 			}
 		});
-		
-		addViewInterface("Companies", new Main());
 		
 		this.historyHandler = new ValueChangeHandler<String>() {
 		    public void onValueChange(final ValueChangeEvent<String> event) {
@@ -174,7 +168,6 @@ public class Header {
     public void doSuccessfulLogin(ClientAuth result) {
     	login.add(new Label("Logged in as " + result.getEmail()));
 		
-		//addViewInterface("Companies", new Main());
 		addViewInterface("Contacts", new ContactView());
 		addViewInterface("Groups", new GroupView());
 		

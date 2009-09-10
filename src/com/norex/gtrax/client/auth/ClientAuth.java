@@ -1,11 +1,12 @@
 package com.norex.gtrax.client.auth;
 
 import com.norex.gtrax.client.ClientModel;
+import com.norex.gtrax.client.ClientModelInterface;
 
-public class ClientAuth extends ClientModel {
+public class ClientAuth extends ClientModel implements AuthInterface, ClientModelInterface {
 	protected String id;
+	
 	protected String email;
-	protected ClientCompany company;
 	
 	protected String authSubToken;
 	protected String authSubURL;
@@ -15,18 +16,6 @@ public class ClientAuth extends ClientModel {
 	}
 	public void setId(String id) {
 		this.id = id;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	public ClientCompany getCompany() {
-		return company;
-	}
-	public void setCompany(ClientCompany company) {
-		this.company = company;
 	}
 	public void setAuthSubToken(String authSubToken) {
 		this.authSubToken = authSubToken;
@@ -39,5 +28,12 @@ public class ClientAuth extends ClientModel {
 	}
 	public String getAuthSubURL() {
 		return authSubURL;
+	}
+	public String getEmail() {
+		return email;
+	}
+	
+	public void setEmail(String email) {
+		this.email = email;
 	}
 }

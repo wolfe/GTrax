@@ -8,6 +8,6 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 @RemoteServiceRelativePath("contact")
 public interface ContactService extends RemoteService {
-	public ArrayList<ClientContact> getCompanyContacts();
+	public ArrayList<ClientContact> getContacts();
 	public ClientContact save(ClientContact contact);
 }
