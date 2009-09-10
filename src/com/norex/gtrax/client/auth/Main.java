@@ -16,6 +16,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.norex.gtrax.client.AsyncRemoteCall;
 import com.norex.gtrax.client.ViewInterface;
 
 public class Main implements ViewInterface {
@@ -35,15 +36,7 @@ public class Main implements ViewInterface {
 			public void onClick(ClickEvent event) {
 				ClientCompany m = new ClientCompany();
 				m.setName(name.getValue());
-				companyService.create(m, new AsyncCallback<ClientCompany>() {
-
-					
-					public void onFailure(Throwable caught) {
-						// TODO Auto-generated method stub
-						
-					}
-
-					
+				companyService.create(m, new AsyncRemoteCall<ClientCompany>() {
 					public void onSuccess(ClientCompany result) {
 						addToList(result);
 						name.setText(null);
@@ -55,14 +48,7 @@ public class Main implements ViewInterface {
     	p.add(name);
     	p.add(create);
 	
-		companyService.getAll(new AsyncCallback<ArrayList<ClientCompany>>() {
-	
-			
-			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-				
-			}
-	
+		companyService.getAll(new AsyncRemoteCall<ArrayList<ClientCompany>>() {
 			public void onSuccess(ArrayList<ClientCompany> results) {
 				for (ClientCompany m : results) {
 					final CompanyWidget w = addToList(m);
@@ -88,13 +74,7 @@ public class Main implements ViewInterface {
 
 			
 			public void onOpen(OpenEvent<DisclosurePanel> event) {
-				companyService.getAuthMembers(m, new AsyncCallback<ArrayList<ClientAuth>>() {
-
-					
-					public void onFailure(Throwable caught) {
-					}
-
-					
+				companyService.getAuthMembers(m, new AsyncRemoteCall<ArrayList<ClientAuth>>() {
 					public void onSuccess(final ArrayList<ClientAuth> authlist) {
 						w.clear();
 						
@@ -113,13 +93,7 @@ public class Main implements ViewInterface {
 							public void onClick(ClickEvent event) {
 								ClientAuth auth = new ClientAuth();
 								auth.setEmail(email.getValue());
-								authService.create(m, auth, new AsyncCallback<ClientAuth>() {
-
-									
-									public void onFailure(Throwable caught) {
-									}
-
-									
+								authService.create(m, auth, new AsyncRemoteCall<ClientAuth>() {
 									public void onSuccess(ClientAuth result) {
 										if (authlist.size() == 0) w.add(new Label("Current Members:"));
 										addUserToCompany(w, result);

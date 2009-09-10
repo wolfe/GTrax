@@ -7,4 +7,5 @@ import com.norex.gtrax.client.ClientModel;
 
 public interface AuthServiceAsync {
 	public void create(ClientCompany c, ClientAuth m, AsyncCallback<ClientAuth> async);
+	public void exchangeAuthSubToken(String token, AsyncCallback<ClientAuth> async);
 }

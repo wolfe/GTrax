@@ -1,15 +1,17 @@
 package com.norex.gtrax.server;
 
-import java.util.HashSet;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.List;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
-import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.gdata.client.http.AuthSubUtil;
+import com.google.gdata.util.AuthenticationException;
 import com.norex.gtrax.client.auth.AuthService;
 import com.norex.gtrax.client.auth.ClientAuth;
 import com.norex.gtrax.client.auth.ClientCompany;
@@ -61,6 +63,7 @@ public class AuthServiceImpl extends GeneralServiceImpl implements
 		List<Auth> rs = (List<Auth>) query.execute(user.getEmail());
 		if (rs.iterator().hasNext()) {
 			for (Auth a : rs) {
+				pm.close();
 				return a;
 			}
 		}
@@ -71,5 +74,32 @@ public class AuthServiceImpl extends GeneralServiceImpl implements
 	
 	public static Company getCurrentCompany() throws NotLoggedInException {
 		return (Company)getCurrentUser().getCompany(); 
+	}
+
+	public ClientAuth exchangeAuthSubToken(String token) {
+		try {
+			Auth a = getCurrentUser();
+			String sessionToken = AuthSubUtil.exchangeForSessionToken(token, null);
+			
+			PersistenceManager pm = PMF.getPersistenceManager();
+			Auth auth = pm.getObjectById(Auth.class, a.getId());
+			auth.setAuthSubToken(sessionToken);
+			pm.close();
+			return auth.toClient();
+		} catch (NotLoggedInException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (AuthenticationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (GeneralSecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return null;
 	}
 }

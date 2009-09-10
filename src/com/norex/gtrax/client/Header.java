@@ -26,6 +26,8 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.norex.gtrax.client.auth.AuthService;
+import com.norex.gtrax.client.auth.AuthServiceAsync;
 import com.norex.gtrax.client.auth.ClientAuth;
 import com.norex.gtrax.client.auth.CompanyService;
 import com.norex.gtrax.client.auth.CompanyServiceAsync;
@@ -96,17 +98,27 @@ public class Header {
 		header.add(menu, DockPanel.EAST);
 		
 		CompanyServiceAsync companyService = GWT.create(CompanyService.class);
-		companyService.login(Window.Location.getHref(), new AsyncCallback<ClientAuth>() {
+		companyService.login(Window.Location.getHref(), new AsyncRemoteCall<ClientAuth>() {
 			
 			@Override
 			public void onSuccess(ClientAuth result) {
-				login.add(new Label("Logged in as " + result.getEmail()));
-				
-				//addViewInterface("Companies", new Main());
-				addViewInterface("Contacts", new ContactView());
-				addViewInterface("Groups", new GroupView());
-				
-				History.fireCurrentHistoryState();
+				if (result.getAuthSubToken() == null) {
+					if (Window.Location.getParameter("token") != null) {
+						AuthServiceAsync authService = GWT.create(AuthService.class);
+						authService.exchangeAuthSubToken(Window.Location.getParameter("token"), new AsyncRemoteCall<ClientAuth>() {
+							@Override
+							public void onSuccess(ClientAuth auth) {
+								doSuccessfulLogin(auth);
+							}
+						});
+						return;
+					} else {
+						Anchor a = new Anchor("AuthSub", result.getAuthSubURL());
+						login.add(a);
+						return;
+					}
+				}
+				doSuccessfulLogin(result);
 			}
 			
 			@Override
@@ -114,6 +126,8 @@ public class Header {
 				if (caught instanceof NotLoggedInException) {
 					Anchor a = new Anchor("Login", ((NotLoggedInException) caught).getLoginURL());
 					login.add(a);
+				} else {
+					super.onFailure(caught);
 				}
 			}
 		});
@@ -155,6 +169,16 @@ public class Header {
     
     public Panel getHeader() {
     	return header;
+    }
+    
+    public void doSuccessfulLogin(ClientAuth result) {
+    	login.add(new Label("Logged in as " + result.getEmail()));
+		
+		//addViewInterface("Companies", new Main());
+		addViewInterface("Contacts", new ContactView());
+		addViewInterface("Groups", new GroupView());
+		
+		History.fireCurrentHistoryState();
     }
 
     public void addViewInterface(String text, ViewInterface viewInterface) {

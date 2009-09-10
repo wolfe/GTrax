@@ -11,6 +11,7 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.gdata.client.http.AuthSubUtil;
 import com.google.gwt.core.client.GWT;
 import com.norex.gtrax.client.auth.ClientAuth;
 import com.norex.gtrax.client.auth.ClientCompany;
@@ -113,6 +114,8 @@ public class CompanyServiceImpl extends GeneralServiceImpl implements
 
 	@Override
 	public ClientAuth login(String url) throws NotLoggedInException {
+		String authurl = AuthSubUtil.getRequestUrl(url, "http://www.google.com/m8/feeds/", false, true);
+		
 		UserService userService = UserServiceFactory.getUserService();
 		if (!userService.isUserLoggedIn()) {
 			NotLoggedInException e = new NotLoggedInException();
@@ -123,7 +126,12 @@ public class CompanyServiceImpl extends GeneralServiceImpl implements
 		User user = userService.getCurrentUser();
 		
 		try {
-			return AuthServiceImpl.getCurrentUser().toClient();
+			Auth a = AuthServiceImpl.getCurrentUser();
+			ClientAuth ac = a.toClient();
+			if (a.getAuthSubToken() == null) {
+				ac.setAuthSubURL(authurl);
+			}
+			return ac;
 		} catch (Exception exception){
 			NotLoggedInException e = new NotLoggedInException();
 			e.setLoginURL(userService.createLoginURL(url));

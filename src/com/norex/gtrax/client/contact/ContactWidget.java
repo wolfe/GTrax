@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -79,20 +80,31 @@ public class ContactWidget extends Composite {
 	@UiField
 	VerticalPanel rightCol;
 	
+	@UiField
+	TextArea notes;
+	
 	public ContactWidget(final ClientContact contact) {
-		this.setContact(contact);
+		setContact(contact);
 		
 		initWidget(uiBinder.createAndBindUi(this));
 		
 		container.setWidth("100%");
 		
-		name.setValue(contact.getName());
-		
+		name.setValue(getContact().getName());
 		name.addValueChangeHandler(new ValueChangeHandler<String>() {
 			
 			@Override
 			public void onValueChange(ValueChangeEvent<String> event) {
 				contact.setName(name.getValue());
+			}
+		});
+		
+		notes.setValue(getContact().getNote());
+		notes.addValueChangeHandler(new ValueChangeHandler<String>() {
+
+			@Override
+			public void onValueChange(ValueChangeEvent<String> event) {
+				getContact().setNote(notes.getValue());
 			}
 		});
 		

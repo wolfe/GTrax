@@ -41,12 +41,12 @@ com.google.gwt.user.client.ui.TabListenerCollection, true, true, true, true, com
 com.google.gwt.user.client.ui.TableListenerCollection, true, true, true, true, com.google.gwt.user.client.ui.TableListenerCollection/285369783, 285369783
 com.google.gwt.user.client.ui.TreeListenerCollection, true, true, true, true, com.google.gwt.user.client.ui.TreeListenerCollection/449704629, 449704629
 com.norex.gtrax.client.ClientModel, true, true, true, true, com.norex.gtrax.client.ClientModel/2409892358, 2409892358
-com.norex.gtrax.client.auth.ClientAuth, true, true, true, true, com.norex.gtrax.client.auth.ClientAuth/2715491185, 2715491185
+com.norex.gtrax.client.auth.ClientAuth, true, true, true, true, com.norex.gtrax.client.auth.ClientAuth/4083851217, 4083851217
 com.norex.gtrax.client.auth.ClientCompany, true, true, true, true, com.norex.gtrax.client.auth.ClientCompany/947953739, 947953739
 com.norex.gtrax.client.auth.Company, true, true, true, true, com.norex.gtrax.client.auth.Company/3759393321, 3759393321
+com.norex.gtrax.client.auth.CompanyService, false, false, false, false, _, 3673266383
 com.norex.gtrax.client.auth.NotLoggedInException, true, true, true, true, com.norex.gtrax.client.auth.NotLoggedInException/1740462277, 1740462277
-com.norex.gtrax.client.contact.ClientContact, true, true, true, true, com.norex.gtrax.client.contact.ClientContact/4186979769, 4186979769
-com.norex.gtrax.client.contact.ContactService, false, false, false, false, _, 229774374
+com.norex.gtrax.client.contact.ClientContact, true, true, true, true, com.norex.gtrax.client.contact.ClientContact/1364708573, 1364708573
 com.norex.gtrax.client.contact.EmailAddress, true, true, true, true, com.norex.gtrax.client.contact.EmailAddress/1507435055, 1507435055
 com.norex.gtrax.client.contact.EmailAddressType, true, true, true, true, com.norex.gtrax.client.contact.EmailAddressType/1535573327, 1535573327
 com.norex.gtrax.client.contact.PhoneNumber, true, true, true, true, com.norex.gtrax.client.contact.PhoneNumber/3389825632, 3389825632

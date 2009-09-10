@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.norex.gtrax.client.AsyncRemoteCall;
 import com.norex.gtrax.client.ClientModel;
 
 public class CompanyWidget extends Composite implements HasWidgets {
@@ -139,7 +140,7 @@ public class CompanyWidget extends Composite implements HasWidgets {
 				
 				CompanyServiceAsync companyService = GWT.create(CompanyService.class);
 				company.setName(name.getValue());
-				companyService.save(company, new AsyncCallback() {
+				companyService.save(company, new AsyncRemoteCall() {
 
 					
 					public void onFailure(Throwable caught) {
@@ -162,17 +163,9 @@ public class CompanyWidget extends Composite implements HasWidgets {
 			public void onClick(final ClickEvent event) {
 				if (Window.confirm("Are you sure??")) {
 					CompanyServiceAsync companyService = GWT.create(CompanyService.class);
-					companyService.delete(company, new AsyncCallback() {
-
-						
+					companyService.delete(company, new AsyncRemoteCall() {
 						public void onSuccess(Object result) {
 							deleteHandler.onClick(event);
-						}
-
-						
-						public void onFailure(Throwable caught) {
-							// TODO Auto-generated method stub
-							
 						}
 					});
 				}

@@ -11,6 +11,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.norex.gtrax.client.AsyncRemoteCall;
 import com.norex.gtrax.client.ViewInterface;
 import com.norex.gtrax.client.auth.CompanyService;
 import com.norex.gtrax.client.auth.CompanyServiceAsync;
@@ -29,19 +30,13 @@ public class GroupView implements ViewInterface {
 		groupsContainer.clear();
 		addGroupContainer.clear();
 		
-		companyService.getGroups(new AsyncCallback<ArrayList<ClientGroup>>() {
+		companyService.getGroups(new AsyncRemoteCall<ArrayList<ClientGroup>>() {
 			
 			@Override
 			public void onSuccess(ArrayList<ClientGroup> result) {
 				for (ClientGroup g : result) {
 					addGroupToList(g);
 				}
-			}
-			
-			@Override
-			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-				
 			}
 		});
 		
@@ -57,15 +52,7 @@ public class GroupView implements ViewInterface {
 				ClientGroup g = new ClientGroup();
 				g.setName(name.getValue());
 				
-				companyService.addGroup(g, new AsyncCallback<ClientGroup>() {
-
-					@Override
-					public void onFailure(Throwable caught) {
-						// TODO Auto-generated method stub
-						
-					}
-
-					@Override
+				companyService.addGroup(g, new AsyncRemoteCall<ClientGroup>() {
 					public void onSuccess(ClientGroup result) {
 						name.setValue(null);
 						addGroupToList(result);

@@ -1,17 +1,18 @@
 package com.norex.gtrax.server;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.jdo.PersistenceManager;
-import javax.jdo.Query;
 
-import com.norex.gtrax.client.auth.AuthService;
-import com.norex.gtrax.client.auth.ClientAuth;
-import com.norex.gtrax.client.auth.ClientCompany;
 import com.norex.gtrax.client.auth.NotLoggedInException;
 import com.norex.gtrax.client.contact.ClientContact;
 import com.norex.gtrax.client.contact.ContactService;
+
+import com.google.gdata.client.*;
+import com.google.gdata.client.contacts.*;
+import com.google.gdata.data.*;
+import com.google.gdata.data.contacts.*;
+import com.google.gdata.data.extensions.*;
 
 public class ContactServiceImpl extends GeneralServiceImpl implements
 		ContactService {

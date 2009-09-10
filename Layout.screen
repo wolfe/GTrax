@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
+  <widgets xsi:type="model:Master" x="16" y="16">
+    <screen href="Master.screen#/"/>
+  </widgets>
+  <widgets xsi:type="model:Accordion" x="24" y="136" width="233" height="575" text="Clean NS&#xA;Drivewiser&#xA;SDI Builders&#xA;Lainghouse&#xA;Maynard Reece&#xA;..."/>
+  <widgets xsi:type="model:Breadcrumbs" x="264" y="136" text="Projects,Clean NS, Tasks">
+    <font/>
+  </widgets>
+  <hRuler/>
+  <vRuler/>
+  <font/>
+</model:Screen>

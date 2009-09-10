@@ -25,6 +25,9 @@ public class Auth extends Model {
 	
 	@Persistent
 	protected Company company;
+	
+	@Persistent
+	private String authSubToken;
 
 	public Company getCompany() {
 		return company;
@@ -50,11 +53,20 @@ public class Auth extends Model {
 		this.email = email;
 	}
 	
+	public void setAuthSubToken(String authSubToken) {
+		this.authSubToken = authSubToken;
+	}
+
+	public String getAuthSubToken() {
+		return authSubToken;
+	}
+
 	public ClientAuth toClient() {
 		ClientAuth tmp = new ClientAuth();
 		
 		tmp.setId(KeyFactory.keyToString(this.getId()));
 		tmp.setEmail(this.getEmail());
+		tmp.setAuthSubToken(this.getAuthSubToken());
 		
 		return tmp;
 		

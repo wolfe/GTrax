@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
+  <widgets xsi:type="model:Browser" x="24" y="16" width="961" height="705" text="Browser&#xA;http://..."/>
+  <widgets xsi:type="model:Panel" x="24" y="68" width="961" height="53"/>
+  <widgets xsi:type="model:Placeholder" x="24" y="68" width="137" height="53" text="Logo"/>
+  <widgets xsi:type="model:SearchField" x="830" y="96" width="151" text="Search"/>
+  <widgets xsi:type="model:Tabs" x="176" y="94" text="Contacts, Projects, Timesheet, Settings"/>
+  <hRuler/>
+  <vRuler/>
+  <font/>
+</model:Screen>

@@ -13,6 +13,7 @@ public class ClientContact extends ClientModel {
 	private ArrayList<Website> website = new ArrayList<Website>();
 	protected ClientCompany company;
 	protected String pictureBlobKey;
+	private String note;
 	
 	public ClientCompany getCompany() {
 		return company;
@@ -55,5 +56,11 @@ public class ClientContact extends ClientModel {
 	}
 	public ArrayList<Website> getWebsite() {
 		return website;
+	}
+	public void setNote(String note) {
+		this.note = note;
+	}
+	public String getNote() {
+		return note;
 	}
 }

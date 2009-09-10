@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.HorizontalSplitPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.norex.gtrax.client.AsyncRemoteCall;
 import com.norex.gtrax.client.ViewInterface;
 import com.norex.gtrax.client.auth.CompanyService;
 import com.norex.gtrax.client.auth.CompanyServiceAsync;
@@ -140,15 +141,7 @@ public class ContactView implements ViewInterface {
 			
 			@Override
 			public void onClick(ClickEvent event) {
-				contactService.save(widget.getContact(), new AsyncCallback<ClientContact>() {
-
-					@Override
-					public void onFailure(Throwable caught) {
-						// TODO Auto-generated method stub
-						
-					}
-
-					@Override
+				contactService.save(widget.getContact(), new AsyncRemoteCall<ClientContact>() {
 					public void onSuccess(ClientContact result) {
 						contactsMap.put(result.getId(), result);
 						widget.setContact(result);
@@ -174,15 +167,7 @@ public class ContactView implements ViewInterface {
 	}
 
 	public void updateFromDataSource() {
-		companyService.getContacts(new AsyncCallback<ArrayList<ClientContact>>() {
-
-			@Override
-			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
+		companyService.getContacts(new AsyncRemoteCall<ArrayList<ClientContact>>() {
 			public void onSuccess(ArrayList<ClientContact> result) {
 				for (ClientContact contact : result) {
 					contactsMap.put(contact.getId(), contact);

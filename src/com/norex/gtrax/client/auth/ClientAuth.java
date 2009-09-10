@@ -7,6 +7,9 @@ public class ClientAuth extends ClientModel {
 	protected String email;
 	protected ClientCompany company;
 	
+	protected String authSubToken;
+	protected String authSubURL;
+	
 	public String getId() {
 		return id;
 	}
@@ -24,5 +27,17 @@ public class ClientAuth extends ClientModel {
 	}
 	public void setCompany(ClientCompany company) {
 		this.company = company;
+	}
+	public void setAuthSubToken(String authSubToken) {
+		this.authSubToken = authSubToken;
+	}
+	public String getAuthSubToken() {
+		return authSubToken;
+	}
+	public void setAuthSubURL(String authSubURL) {
+		this.authSubURL = authSubURL;
+	}
+	public String getAuthSubURL() {
+		return authSubURL;
 	}
 }

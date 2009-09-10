@@ -24,6 +24,10 @@
 				</gwt:HorizontalPanel>
 				<gwt:VerticalPanel ui:field="websites" res:styleName="css.elementsContainer"></gwt:VerticalPanel>
 				
+				<gwt:HorizontalPanel res:styleName="css.nodeContainer">
+					<gwt:Label res:styleName="css.nodeLabel">Notes</gwt:Label>
+					<gwt:TextArea ui:field="notes" />
+				</gwt:HorizontalPanel>
 			</gwt:VerticalPanel>
 
 			<gwt:VerticalPanel ui:field="rightCol">

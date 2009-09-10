@@ -32,7 +32,10 @@ public class Contact extends Model {
 	protected ArrayList<PhoneNumber> phone = new ArrayList<PhoneNumber>();
 	
 	@Persistent(serialized = "true")
-	private ArrayList<Website> website = new ArrayList<Website>();
+	protected ArrayList<Website> website = new ArrayList<Website>();
+	
+	@Persistent
+	private String note;
 	
 	@Persistent
 	protected Company company;
@@ -96,11 +99,20 @@ public class Contact extends Model {
 		return website;
 	}
 
+	public void setNote(String note) {
+		this.note = note;
+	}
+
+	public String getNote() {
+		return note;
+	}
+
 	public void update(ClientContact contact) {
 		this.setEmail(contact.getEmail());
 		this.setPhone(contact.getPhone());
 		this.setName(contact.getName());
 		this.setWebsite(contact.getWebsite());
+		this.setNote(contact.getNote());
 		
 		if (contact.getPictureBlobKey() != null) {
 			this.setPicture(KeyFactory.stringToKey(contact.getPictureBlobKey()));
@@ -114,6 +126,7 @@ public class Contact extends Model {
 		tmp.setPhone(this.getPhone());
 		tmp.setWebsite(this.getWebsite());
 		tmp.setId(KeyFactory.keyToString(this.getId()));
+		tmp.setNote(this.getNote());
 		
 		if (this.getPicture() != null) {
 			tmp.setPictureBlobKey(KeyFactory.keyToString(this.getPicture()));

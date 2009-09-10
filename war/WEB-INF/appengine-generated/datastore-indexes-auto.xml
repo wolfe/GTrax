@@ -1,10 +1,4 @@
-<!-- Indices written at Tue, 8 Sep 2009 19:56:33 UTC -->
+<!-- Indices written at Wed, 9 Sep 2009 22:11:56 UTC -->
 
-<datastore-indexes>
+<datastore-indexes/>
 
-    <!-- Used 59 times in query history -->
-    <datastore-index kind="Contact" ancestor="true" source="auto">
-        <property name="contactSet_INTEGER_IDX" direction="asc"/>
-    </datastore-index>
-
-</datastore-indexes>
