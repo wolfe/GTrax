@@ -1,9 +1,0 @@
-<gwt:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
-        xmlns:gwt='urn:import:com.google.gwt.user.client.ui'>
-
-		<gwt:HorizontalPanel ui:field="container">
-			<gwt:TextBox ui:field="phone" />
-			<gwt:ListBox ui:field="type" />
-		</gwt:HorizontalPanel>
-
-</gwt:UiBinder> 
