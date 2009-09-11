@@ -7,10 +7,12 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
@@ -20,21 +22,23 @@ import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteHandler;
+import com.google.gwt.user.datepicker.client.DateBox;
+import com.google.gwt.user.datepicker.client.DateBox.Format;
 import com.norex.gtrax.client.contact.EmailWidget;
 import com.norex.gtrax.client.contact.WebsiteWidget;
 import com.norex.gtrax.client.contact.PhoneWidget;
+import java.util.Date;
 
 public class ContactWidget extends Composite {
 
 	private ClientContact contact;
-	
+
 	interface MyUiBinder extends UiBinder<Widget, ContactWidget> {
 	}
 	
@@ -83,6 +87,9 @@ public class ContactWidget extends Composite {
 	@UiField
 	TextArea notes;
 	
+	@UiField
+	DateBox birthday;
+	
 	public ContactWidget(final ClientContact contact) {
 		setContact(contact);
 		
@@ -92,8 +99,6 @@ public class ContactWidget extends Composite {
 		
 		name.setValue(getContact().getName());
 		name.addValueChangeHandler(new ValueChangeHandler<String>() {
-			
-			@Override
 			public void onValueChange(ValueChangeEvent<String> event) {
 				contact.setName(name.getValue());
 			}
@@ -101,8 +106,6 @@ public class ContactWidget extends Composite {
 		
 		notes.setValue(getContact().getNote());
 		notes.addValueChangeHandler(new ValueChangeHandler<String>() {
-
-			@Override
 			public void onValueChange(ValueChangeEvent<String> event) {
 				getContact().setNote(notes.getValue());
 			}
@@ -118,8 +121,6 @@ public class ContactWidget extends Composite {
 		
 		addNewEmail.setText("add");
 		addNewEmail.addClickHandler(new ClickHandler() {
-			
-			@Override
 			public void onClick(ClickEvent event) {
 				EmailAddress a = new EmailAddress();
 				getContact().getEmail().add(a);
@@ -138,8 +139,6 @@ public class ContactWidget extends Composite {
 		
 		addNewPhone.setText("add");
 		addNewPhone.addClickHandler(new ClickHandler() {
-			
-			@Override
 			public void onClick(ClickEvent event) {
 				PhoneNumber a = new PhoneNumber();
 				getContact().getPhone().add(a);
@@ -157,8 +156,6 @@ public class ContactWidget extends Composite {
 		
 		addWebsite.setText("add");
 		addWebsite.addClickHandler(new ClickHandler() {
-			
-			@Override
 			public void onClick(ClickEvent event) {
 				Website w = new Website();
 				getContact().getWebsite().add(w);
@@ -169,8 +166,6 @@ public class ContactWidget extends Composite {
 		contactImage.setUrl(getBlobImageURL());
 		
 		contactImage.addClickHandler(new ClickHandler() {
-			
-			@Override
 			public void onClick(ClickEvent event) {
 				final DialogBox popup = new DialogBox();
 				popup.setAnimationEnabled(true);
@@ -234,6 +229,14 @@ public class ContactWidget extends Composite {
 				popup.add(panel);
 				popup.center();
 				popup.show();
+			}
+		});
+		
+		birthday.setFormat(new DateBox.DefaultFormat(DateTimeFormat.getShortDateFormat()));
+		birthday.setValue(getContact().getBirthday());
+		birthday.addValueChangeHandler(new ValueChangeHandler<Date>() {
+			public void onValueChange(ValueChangeEvent<Date> event) {
+				getContact().setBirthday(birthday.getValue());
 			}
 		});
 	}

@@ -5,8 +5,8 @@ import java.util.List;
 
 import javax.jdo.PersistenceManager;
 
-import com.norex.gtrax.client.auth.ClientAuth;
-import com.norex.gtrax.client.auth.NotLoggedInException;
+import com.norex.gtrax.client.authentication.NotLoggedInException;
+import com.norex.gtrax.client.authentication.auth.ClientAuth;
 import com.norex.gtrax.client.contact.ClientContact;
 import com.norex.gtrax.client.contact.ContactService;
 import javax.jdo.Query;

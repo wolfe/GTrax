@@ -2,6 +2,8 @@ package com.norex.gtrax.server;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.jdo.JDOObjectNotFoundException;
@@ -15,9 +17,10 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gdata.client.http.AuthSubUtil;
 import com.google.gdata.util.AuthenticationException;
-import com.norex.gtrax.client.auth.AuthService;
-import com.norex.gtrax.client.auth.ClientAuth;
-import com.norex.gtrax.client.auth.NotLoggedInException;
+import com.norex.gtrax.client.authentication.AuthService;
+import com.norex.gtrax.client.authentication.NotLoggedInException;
+import com.norex.gtrax.client.authentication.auth.ClientAuth;
+import com.norex.gtrax.client.authentication.group.ClientGroup;
 
 public class AuthServiceImpl extends GeneralServiceImpl implements
 		AuthService {
@@ -80,13 +83,11 @@ public class AuthServiceImpl extends GeneralServiceImpl implements
 		return null;
 	}
 
-	@Override
 	public void delete(ClientAuth a) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
 	public ClientAuth login(String url) throws NotLoggedInException {
 		UserService userService = UserServiceFactory.getUserService();
 
@@ -122,5 +123,77 @@ public class AuthServiceImpl extends GeneralServiceImpl implements
 		} finally {
 			pm.close();
 		}
+	}
+
+	public ClientGroup createGroup(ClientGroup group) {
+		PersistenceManager pm = PMF.getPersistenceManager();
+		
+		Group g = new Group();
+		g.update(group);
+		
+		pm.makePersistent(g);
+		
+		pm.close();
+		
+		return g.toClient();
+	}
+
+	public ArrayList<ClientGroup> getGroups() {
+		PersistenceManager pm = PMF.getPersistenceManager();
+		
+		Query query = pm.newQuery(Group.class);
+		
+		ArrayList<ClientGroup> list = new ArrayList<ClientGroup>();
+		
+		try {
+			List<Group> results = (List<Group>) query.execute();
+			if (!results.iterator().hasNext()) return null;
+			
+			for (Group g : results) {
+				list.add(g.toClient());
+			}
+		} finally {
+			query.closeAll();
+			pm.close();
+		}
+		
+		return list;
+	}
+
+	public ClientAuth addAuthToGroup(String email, ClientGroup group) {
+		PersistenceManager pm = PMF.getPersistenceManager();
+		
+		Auth a = pm.getObjectById(Auth.class, email);
+		Group g = pm.getObjectById(Group.class, group.getId());
+		
+		if (g.getAuthSet() == null) {
+			g.setAuthSet(new HashSet<Key>());
+		}
+		
+		g.getAuthSet().add(a.getId());
+		
+		pm.close();
+		
+		return a.toClient();
+	}
+
+	public ArrayList<ClientAuth> getGroupMembers(ClientGroup group) {
+		PersistenceManager pm = PMF.getPersistenceManager();
+		Group g = pm.getObjectById(Group.class, group.getId());
+		
+		if (g.getAuthSet() == null) {
+			g.setAuthSet(new HashSet<Key>());
+		}
+		
+		ArrayList<ClientAuth> list = new ArrayList<ClientAuth>();
+		
+		for (Key k : g.getAuthSet()) {
+			Auth a = pm.getObjectById(Auth.class, k);
+			list.add(a.toClient());
+		}
+		
+		pm.close();
+		
+		return list;
 	}
 }

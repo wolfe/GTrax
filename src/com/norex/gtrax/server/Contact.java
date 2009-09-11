@@ -1,6 +1,7 @@
 package com.norex.gtrax.server;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
@@ -40,6 +41,9 @@ public class Contact extends Model implements ContactInterface, ModelInterface {
 	
 	@Persistent
 	protected Key picture;
+	
+	@Persistent
+	protected Date birthday;
 
 	public Key getId() {
 		return id;
@@ -97,12 +101,21 @@ public class Contact extends Model implements ContactInterface, ModelInterface {
 		return note;
 	}
 
+	public Date getBirthday() {
+		return this.birthday;
+	}
+
+	public void setBirthday(Date day) {
+		this.birthday = day;
+	}
+	
 	public void update(ClientContact contact) {
 		this.setEmail(contact.getEmail());
 		this.setPhone(contact.getPhone());
 		this.setName(contact.getName());
 		this.setWebsite(contact.getWebsite());
 		this.setNote(contact.getNote());
+		this.setBirthday(contact.getBirthday());
 		
 		if (contact.getPictureBlobKey() != null) {
 			this.setPicture(KeyFactory.stringToKey(contact.getPictureBlobKey()));
@@ -117,6 +130,7 @@ public class Contact extends Model implements ContactInterface, ModelInterface {
 		tmp.setWebsite(this.getWebsite());
 		tmp.setId(KeyFactory.keyToString(this.getId()));
 		tmp.setNote(this.getNote());
+		tmp.setBirthday(this.getBirthday());
 		
 		if (this.getPicture() != null) {
 			tmp.setPictureBlobKey(KeyFactory.keyToString(this.getPicture()));

@@ -1,17 +1,19 @@
 package com.norex.gtrax.client.contact;
 
 import java.util.ArrayList;
-
+import java.util.Date;
 
 public interface ContactInterface {
-	public abstract String getName();
-	public abstract void setName(String name);
-	public abstract ArrayList<EmailAddress> getEmail();
-	public abstract void setEmail(ArrayList<EmailAddress> email);
-	public abstract ArrayList<PhoneNumber> getPhone();
-	public abstract void setPhone(ArrayList<PhoneNumber> phone);
-	public abstract void setWebsite(ArrayList<Website> website);
-	public abstract ArrayList<Website> getWebsite();
-	public abstract void setNote(String note);
-	public abstract String getNote();
+	public String getName();
+	public void setName(String name);
+	public ArrayList<EmailAddress> getEmail();
+	public void setEmail(ArrayList<EmailAddress> email);
+	public ArrayList<PhoneNumber> getPhone();
+	public void setPhone(ArrayList<PhoneNumber> phone);
+	public void setWebsite(ArrayList<Website> website);
+	public ArrayList<Website> getWebsite();
+	public void setNote(String note);
+	public String getNote();
+	public void setBirthday(Date day);
+	public Date getBirthday();
 }

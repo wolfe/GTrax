@@ -11,8 +11,8 @@ import javax.jdo.annotations.PrimaryKey;
 
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
-import com.norex.gtrax.client.auth.ClientAuth;
-import com.norex.gtrax.client.auth.AuthInterface;
+import com.norex.gtrax.client.authentication.AuthInterface;
+import com.norex.gtrax.client.authentication.auth.ClientAuth;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class Auth extends Model implements AuthInterface, ModelInterface {

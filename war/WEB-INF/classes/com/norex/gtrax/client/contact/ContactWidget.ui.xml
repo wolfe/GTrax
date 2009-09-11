@@ -1,6 +1,7 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
         xmlns:gwt='urn:import:com.google.gwt.user.client.ui'
-        xmlns:res='urn:with:com.norex.gtrax.client.contact.ContactView.ContactViewResources'>
+        xmlns:res='urn:with:com.norex.gtrax.client.contact.ContactView.ContactViewResources'
+        xmlns:datepicker='urn:import:com.google.gwt.user.datepicker.client'>
 
 		<gwt:HorizontalPanel ui:field="container">
 			<gwt:VerticalPanel ui:field="leftCol">
@@ -28,6 +29,14 @@
 					<gwt:Label res:styleName="css.nodeLabel">Notes</gwt:Label>
 					<gwt:TextArea ui:field="notes" />
 				</gwt:HorizontalPanel>
+				
+				<gwt:HorizontalPanel res:styleName="css.nodeContainer">
+					<gwt:Label res:styleName="css.nodeLabel">Birthday</gwt:Label>
+				</gwt:HorizontalPanel>
+				<gwt:VerticalPanel res:styleName="css.elementsContainer">
+					<datepicker:DateBox ui:field="birthday" />
+				</gwt:VerticalPanel>
+				
 			</gwt:VerticalPanel>
 
 			<gwt:VerticalPanel ui:field="rightCol">

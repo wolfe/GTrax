@@ -25,11 +25,11 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.norex.gtrax.client.auth.AuthService;
-import com.norex.gtrax.client.auth.AuthServiceAsync;
-import com.norex.gtrax.client.auth.ClientAuth;
-import com.norex.gtrax.client.auth.GroupView;
-import com.norex.gtrax.client.auth.NotLoggedInException;
+import com.norex.gtrax.client.authentication.AuthService;
+import com.norex.gtrax.client.authentication.AuthServiceAsync;
+import com.norex.gtrax.client.authentication.NotLoggedInException;
+import com.norex.gtrax.client.authentication.auth.ClientAuth;
+import com.norex.gtrax.client.authentication.group.GroupView;
 import com.norex.gtrax.client.contact.ContactView;
 
 public class Header {
