@@ -43,10 +43,6 @@ public class Header {
 		
 		@Resource("norexLogo.png")
 		AbstractImagePrototype logo();
-		
-		@Resource("logo.png")
-		AbstractImagePrototype logoWhite();
-		
 	}
 	
 	interface AppResource extends ClientBundle {
