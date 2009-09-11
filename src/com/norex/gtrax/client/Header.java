@@ -66,6 +66,9 @@ public class Header {
      */
     private HashMap<Hyperlink, ViewInterface> itemWidgets = new HashMap<Hyperlink, ViewInterface>();
     
+    /**
+     * A mapping of the ViewInterface to the generated Panel (HTML history)
+     */
     private HashMap<ViewInterface, Panel> itemContent = new HashMap<ViewInterface, Panel>();
 
     final DockPanel header = new DockPanel();
