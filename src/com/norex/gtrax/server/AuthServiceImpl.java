@@ -196,4 +196,13 @@ public class AuthServiceImpl extends GeneralServiceImpl implements
 		
 		return list;
 	}
+
+	public void deleteGroup(ClientGroup group) {
+		PersistenceManager pm = PMF.getPersistenceManager();
+		Group g = pm.getObjectById(Group.class, group.getId());
+		
+		pm.deletePersistent(g);
+		
+		pm.close();
+	}
 }

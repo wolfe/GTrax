@@ -19,4 +19,5 @@ public interface AuthService extends RemoteService {
 	public ArrayList<ClientGroup> getGroups();
 	public ClientAuth addAuthToGroup(String auth, ClientGroup group);
 	public ArrayList<ClientAuth> getGroupMembers(ClientGroup group);
+	public void deleteGroup(ClientGroup group);
 }

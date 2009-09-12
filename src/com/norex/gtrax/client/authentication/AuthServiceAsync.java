@@ -18,4 +18,5 @@ public interface AuthServiceAsync {
 	public void getGroups(AsyncCallback<ArrayList<ClientGroup>> async);
 	public void addAuthToGroup(String auth, ClientGroup group, AsyncCallback<ClientAuth> async);
 	public void getGroupMembers(ClientGroup group, AsyncCallback<ArrayList<ClientAuth>> async);
+	public void deleteGroup(ClientGroup group, AsyncCallback async);
 }

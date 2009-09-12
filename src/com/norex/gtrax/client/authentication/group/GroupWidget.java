@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
@@ -19,6 +20,7 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
@@ -40,6 +42,7 @@ public class GroupWidget extends Composite implements HasOpenHandlers<Disclosure
 	
 	private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 	
+	
 	@UiField
 	Label name;
 
@@ -52,8 +55,12 @@ public class GroupWidget extends Composite implements HasOpenHandlers<Disclosure
 	@UiField
 	VerticalPanel membersList;
 	
+	@UiField
+	Anchor remove;
+	
 	public GroupWidget(ClientGroup group) {
 		setGroup(group);
+		
 		initWidget(uiBinder.createAndBindUi(this));
 		
 		name.setText(getGroup().getName());
@@ -75,6 +82,19 @@ public class GroupWidget extends Composite implements HasOpenHandlers<Disclosure
 				}
 			}
 		});
+		
+		final GroupWidget w = this;
+		remove.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				if (!Window.confirm("Do you really want to delete this group?")) return;
+				
+				authService.deleteGroup(getGroup(), new AsyncRemoteCall() {
+					public void onSuccess(Object result) {
+						w.removeFromParent();
+					}
+				});
+			}
+		});
 	}
 	
 	@UiHandler("addButton")
@@ -94,7 +114,7 @@ public class GroupWidget extends Composite implements HasOpenHandlers<Disclosure
 	}
 	
 	public void updateMembersHeader() {
-		members.setHeader(new Anchor(getGroup().getAuthSet().toArray().length + " members"));
+		members.setHeader(new Anchor(getGroup().getAuthSet().toArray().length + " members (click to expand)"));
 	}
 	
 	public void getGroupMembers() {
