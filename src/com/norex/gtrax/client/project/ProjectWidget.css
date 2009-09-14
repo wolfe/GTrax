@@ -1,0 +1,16 @@
+.widgetContainer {
+    float: left;
+    width: 49%;
+    margin: 0 1% 10px 0;
+    height: 200px;
+}
+
+.widgetContainer td.topLeft, .widgetContainer td.bottomLeft, .widgetContainer td.topRight, .widgetContainer td.bottomRight {
+	width: 5px;
+	height: 5px;
+}
+
+.widgetContainer td.middleCenter {
+	padding: 5px;
+	vertical-align: top;
+}

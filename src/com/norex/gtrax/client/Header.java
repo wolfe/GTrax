@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Hyperlink;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ImageBundle;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
@@ -31,19 +32,9 @@ import com.norex.gtrax.client.authentication.NotLoggedInException;
 import com.norex.gtrax.client.authentication.auth.ClientAuth;
 import com.norex.gtrax.client.authentication.group.GroupView;
 import com.norex.gtrax.client.contact.ContactView;
+import com.norex.gtrax.client.project.ProjectView;
 
 public class Header {
-	
-	interface AppCSS extends CssResource {
-		String header();
-	}
-	
-	interface AppImageBundle extends ImageBundle {
-		public AppImageBundle INSTANCE = GWT.create(AppImageBundle.class);
-		
-		@Resource("norexLogo.png")
-		AbstractImagePrototype logo();
-	}
 	
 	interface AppResource extends ClientBundle {
 		public AppResource INSTANCE = GWT.create(AppResource.class);
@@ -54,6 +45,19 @@ public class Header {
 		@Source("top-bg.png")
 		@ImageOptions(repeatStyle=RepeatStyle.Horizontal)
 		ImageResource background();
+		
+		interface AppCSS extends CssResource {
+			String header();
+			String logobar();
+			String logo();
+		}
+		
+		interface AppImageBundle extends ImageBundle {
+			public AppImageBundle INSTANCE = GWT.create(AppImageBundle.class);
+			
+			@Resource("logo.png")
+			AbstractImagePrototype logo();
+		}
 	}
 	
     /**
@@ -80,7 +84,10 @@ public class Header {
     public Header() {
     	StyleInjector.injectStylesheet(AppResource.INSTANCE.css().getText());
 
-    	menu.add(AppImageBundle.INSTANCE.logo().createImage());
+    	RootPanel.get("logobar").addStyleName(AppResource.INSTANCE.css().logobar());
+    	Image logo = AppResource.AppImageBundle.INSTANCE.logo().createImage();
+    	logo.addStyleName(AppResource.INSTANCE.css().logo());
+    	RootPanel.get("logobar").add(logo);
     	
 		header.setHorizontalAlignment(DockPanel.ALIGN_LEFT);
 		header.setWidth("100%");
@@ -169,6 +176,7 @@ public class Header {
 		
 		addViewInterface("Contacts", new ContactView());
 		addViewInterface("Groups", new GroupView());
+		addViewInterface("Projects", new ProjectView());
 		
 		History.fireCurrentHistoryState();
     }

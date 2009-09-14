@@ -4,7 +4,7 @@ import java.util.Set;
 
 import com.norex.gtrax.client.ClientModelInterface;
 
-public interface GroupInterface<E> extends ClientModelInterface {
+public interface GroupInterface<E> {
 	public String getName();
 	public void setName(String name);
 	public String getDescription();

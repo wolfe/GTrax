@@ -1,12 +1,17 @@
-@sprite .header {
-	background-color: #888;
-	font-color: #fff;
+.header {
 	padding: 6px;
 	margin-bottom: 10px;
-	gwt-image: "background";
+	border-bottom: 1px solid rgb(201, 215, 241);
 }
 
 .header a {
-	color: #fff;
 	margin-right: 10px;
+}
+
+.logobar {
+	padding: 6px;
+}
+
+.logo{
+	margin-right: 6px;
 }

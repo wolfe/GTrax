@@ -15,7 +15,7 @@ import com.norex.gtrax.client.authentication.group.ClientGroup;
 import com.norex.gtrax.client.authentication.group.GroupInterface;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class Group extends Model implements GroupInterface<Key>, ModelInterface {
+public class Group extends Model implements GroupInterface<Key> {
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     protected Key id;

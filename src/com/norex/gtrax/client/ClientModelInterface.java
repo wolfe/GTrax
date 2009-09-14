@@ -6,5 +6,5 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public interface ClientModelInterface extends Serializable {
+public interface ClientModelInterface extends DataInterchangeModelInterface<String>, Serializable {
 }

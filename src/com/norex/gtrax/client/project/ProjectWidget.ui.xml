@@ -1,0 +1,43 @@
+<gwt:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+        xmlns:gwt='urn:import:com.google.gwt.user.client.ui'>
+
+		<ui:style>
+			.contactLabel {
+				margin-left: 20px;
+				font-style: italic;
+			}
+			
+			.descriptionfield {
+				width: 100%;
+				
+			}
+			
+			.description {
+				margin-top: 6px;
+				font-weight: bold;
+			}
+			
+			.save {
+				float: right;
+			}
+		</ui:style>
+
+	<gwt:DecoratorPanel>
+		<gwt:VerticalPanel width="100%">
+			<gwt:HorizontalPanel width="100%">
+				<gwt:TextBox ui:field="name" />
+				<gwt:Label ui:field="contactLabel" styleName="{style.contactLabel}" />
+				<gwt:Button ui:field="save" text="save" styleName="{style.save}" />
+			</gwt:HorizontalPanel>
+			
+			<gwt:Label text="Description:" styleName="{style.description}" />
+			<gwt:TextArea ui:field="description" styleName="{style.descriptionfield}" />
+			
+			<gwt:HorizontalPanel width="100%">
+				<gwt:Label text="Status:" />
+				<gwt:CheckBox ui:field="status" />
+			</gwt:HorizontalPanel>
+		</gwt:VerticalPanel>
+	</gwt:DecoratorPanel>
+
+</gwt:UiBinder> 

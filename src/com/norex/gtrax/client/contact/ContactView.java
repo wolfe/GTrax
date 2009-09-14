@@ -50,15 +50,17 @@ public class ContactView implements ViewInterface {
 	
 	final VerticalPanel contactsList = new VerticalPanel();
 	
-	ContactServiceAsync contactService = GWT.create(ContactService.class);
+	public static ContactServiceAsync contactService = GWT.create(ContactService.class);
 
 	public Panel getView() {
 		left.clear();
 		right.clear();
 		StyleInjector.injectStylesheet(ContactViewResources.INSTANCE.css().getText());
 		p.clear();
+		p.setWidth("100%");
 		
 		DecoratorPanel decPanel = new DecoratorPanel();
+		decPanel.setWidth("100%");
 
 		contactPanel.setSize("1200px", "550px");
 		contactPanel.setSplitPosition("20%");

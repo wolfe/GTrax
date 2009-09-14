@@ -5,5 +5,12 @@ body {
 	font-size: 12px;
 }
 
-.logo{}
+.content {
+	padding: 5px;
+}
 
+.errorMessage {
+	background-color: red;
+	width: 100px;
+	color: #fff;
+}

@@ -21,6 +21,17 @@
   </servlet-mapping>
   
     <servlet>
+    <servlet-name>ProjectServiceImpl</servlet-name>
+    <servlet-class>com.norex.gtrax.server.ProjectServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>ProjectServiceImpl</servlet-name>
+    <url-pattern>/gtrax/project</url-pattern>
+  </servlet-mapping>
+  
+  
+    <servlet>
     <servlet-name>ContactServiceImpl</servlet-name>
     <servlet-class>com.norex.gtrax.server.ContactServiceImpl</servlet-class>
   </servlet>

@@ -18,7 +18,7 @@ import com.norex.gtrax.client.contact.PhoneNumber;
 import com.norex.gtrax.client.contact.Website;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class Contact extends Model implements ContactInterface, ModelInterface {
+public class Contact extends Model implements ContactInterface {
 	
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)

@@ -22,7 +22,8 @@ public class GTrax implements EntryPoint {
 	final static Resources resources = Resources.INSTANCE;
 
 	interface SiteCSS extends CssResource {
-		String logo();
+		String content();
+		String errorMessage();
 	}
 
 	interface Resources extends ClientBundle {
@@ -48,6 +49,7 @@ public class GTrax implements EntryPoint {
 
 		Header header = new Header();
 		RootPanel.get().clear();
+		RootPanel.get("content").addStyleName(resources.css().content());
 		RootPanel.get("header").add(header.getHeader());
 
 		History.addValueChangeHandler(header.historyHandler);
