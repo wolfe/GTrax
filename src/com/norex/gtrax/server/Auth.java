@@ -26,6 +26,12 @@ public class Auth extends Model implements AuthInterface {
 	private String email;
 	
 	@Persistent
+	private String firstName;
+	
+	@Persistent
+	private String lastName;
+	
+	@Persistent
 	private String authSubToken;
 	
 	@Persistent 
@@ -68,10 +74,35 @@ public class Auth extends Model implements AuthInterface {
 		
 		tmp.setId(KeyFactory.keyToString(this.getId()));
 		tmp.setEmail(getEmail());
+		tmp.setFirstName(getFirstName());
+		tmp.setLastName(getLastName());
 		tmp.setAuthSubToken(this.getAuthSubToken());
 		
 		return tmp;
 		
+	}
+	
+	public void update(ClientAuth a) {
+		setEmail(a.getEmail());
+		setAuthSubToken(a.getAuthSubToken());
+		setFirstName(a.getFirstName());
+		setLastName(a.getLastName());
+	}
+
+	public String getFirstName() {
+		return this.firstName;
+	}
+
+	public void setFirstName(String name) {
+		this.firstName = name;
+	}
+
+	public String getLastName() {
+		return this.lastName;
+	}
+
+	public void setLastName(String name) {
+		this.lastName = name;
 	}
 
 }

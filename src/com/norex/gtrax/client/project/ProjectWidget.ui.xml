@@ -37,6 +37,10 @@
 				<gwt:Label text="Status:" />
 				<gwt:CheckBox ui:field="status" />
 			</gwt:HorizontalPanel>
+			
+			<gwt:HorizontalPanel ui:field="addauthcontainer">
+				<gwt:Label text="Add user to this project: (email address)" />
+			</gwt:HorizontalPanel>
 		</gwt:VerticalPanel>
 	</gwt:DecoratorPanel>
 

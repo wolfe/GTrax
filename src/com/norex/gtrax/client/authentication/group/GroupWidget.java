@@ -27,6 +27,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.norex.gtrax.client.AsyncRemoteCall;
+import com.norex.gtrax.client.AuthSuggestBox;
 import com.norex.gtrax.client.authentication.AuthService;
 import com.norex.gtrax.client.authentication.AuthServiceAsync;
 import com.norex.gtrax.client.authentication.auth.AuthWidget;
@@ -50,7 +51,7 @@ public class GroupWidget extends Composite implements HasOpenHandlers<Disclosure
 	DisclosurePanel members;
 	
 	@UiField
-	TextBox add;
+	AuthSuggestBox add;
 	
 	@UiField
 	VerticalPanel membersList;
@@ -75,14 +76,6 @@ public class GroupWidget extends Composite implements HasOpenHandlers<Disclosure
 			}
 		});
 		
-		add.addKeyPressHandler(new KeyPressHandler() {
-			public void onKeyPress(KeyPressEvent event) {
-				if (event.getCharCode() == KeyCodes.KEY_ENTER && add.getValue().trim().length() > 0) {
-					doAddButton();
-				}
-			}
-		});
-		
 		final GroupWidget w = this;
 		remove.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
@@ -103,7 +96,7 @@ public class GroupWidget extends Composite implements HasOpenHandlers<Disclosure
 	}
 	
 	public void doAddButton() {
-		authService.addAuthToGroup(add.getValue().trim(), getGroup(), new AsyncRemoteCall<ClientAuth>() {
+		authService.addAuthToGroup(add.getAuthValue(), getGroup(), new AsyncRemoteCall<ClientAuth>() {
 			public void onSuccess(ClientAuth result) {
 				add.setValue(null);
 				getGroup().getAuthSet().add(result.getId());

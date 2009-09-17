@@ -10,12 +10,15 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.norex.gtrax.client.AsyncRemoteCall;
+import com.norex.gtrax.client.AuthSuggestBox;
 import com.norex.gtrax.client.contact.ClientContact;
 
 public class ProjectWidget extends Composite {
@@ -39,9 +42,15 @@ public class ProjectWidget extends Composite {
 	@UiField
 	CheckBox status;
 	
+	@UiField
+	HorizontalPanel addauthcontainer;
+	
 	public ProjectWidget(ClientProject project) {
 		initWidget(uiBinder.createAndBindUi(this));
 		setProject(project);
+		
+		AuthSuggestBox box = new AuthSuggestBox();
+		addauthcontainer.add(box);
 	}
 	
 	@UiHandler("save")

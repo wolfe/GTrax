@@ -11,17 +11,17 @@ import com.norex.gtrax.client.ClientModel;
 
 abstract public class GeneralServiceImpl extends RemoteServiceServlet {
 
-	public ArrayList<ClientModel> getAll(Class type) {
+	public <T> ArrayList<T> getAll(Class type) {
 		PersistenceManager pm = PMF.getPersistenceManager();
 		
-		ArrayList<ClientModel> list = new ArrayList<ClientModel>();
+		ArrayList<T> list = new ArrayList<T>();
 		Query query = pm.newQuery(type);
 		
 		try {
 			List<Model> results = (List<Model>) query.execute();
 			if (results.iterator().hasNext()) {
 	            for (Model e : results) {
-	                list.add(e.toClient());
+	                list.add((T)e.toClient());
 	            }
 	        }
 		} finally {

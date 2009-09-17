@@ -95,6 +95,14 @@ public class ProjectView implements ViewInterface {
 					contacts.put(c.getId(), c);
 				}
 				
+				projectService.getProjects(new AsyncRemoteCall<ArrayList<ClientProject>>() {
+					public void onSuccess(ArrayList<ClientProject> result) {
+						for (ClientProject p : result) {
+							addProjectToMap(p);
+						}
+					}
+				});
+				
 				for (ClientContact c : contacts.values()) {
 					if (!result.contains(c)) {
 						contacts.remove(c.getId());
@@ -112,13 +120,7 @@ public class ProjectView implements ViewInterface {
 			}
 		});
 		
-		projectService.getProjects(new AsyncRemoteCall<ArrayList<ClientProject>>() {
-			public void onSuccess(ArrayList<ClientProject> result) {
-				for (ClientProject p : result) {
-					addProjectToMap(p);
-				}
-			}
-		});
+		
 	}
 	
 	private void addProjectToMap(ClientProject p) {

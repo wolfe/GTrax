@@ -2,9 +2,12 @@ package com.norex.gtrax.client.authentication;
 
 
 public interface AuthInterface {
-	public abstract void setEmail(String email);
-	public abstract String getEmail();
-	public abstract void setAuthSubToken(String authSubToken);
-	public abstract String getAuthSubToken();
-
+	public void setEmail(String email);
+	public String getEmail();
+	public void setAuthSubToken(String authSubToken);
+	public String getAuthSubToken();
+	public void setFirstName(String name);
+	public String getFirstName();
+	public void setLastName(String name);
+	public String getLastName();
 }

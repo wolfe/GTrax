@@ -5,17 +5,19 @@ import java.util.List;
 
 import javax.jdo.PersistenceManager;
 
+import com.google.appengine.api.datastore.KeyFactory;
 import com.norex.gtrax.client.authentication.NotLoggedInException;
 import com.norex.gtrax.client.authentication.auth.ClientAuth;
 import com.norex.gtrax.client.contact.ClientContact;
 import com.norex.gtrax.client.contact.ContactService;
+import com.norex.gtrax.client.project.ClientProject;
+
 import javax.jdo.Query;
 
 
 public class ContactServiceImpl extends GeneralServiceImpl implements
 		ContactService {
 
-	@Override
 	public ArrayList<ClientContact> getContacts() {
 		PersistenceManager pm = PMF.getPersistenceManager();
 		Query query = pm.newQuery(Contact.class);
@@ -37,7 +39,6 @@ public class ContactServiceImpl extends GeneralServiceImpl implements
 		return list;
 	}
 
-	@Override
 	public ClientContact save(ClientContact contact) {
 		Contact c = null;
 
@@ -54,6 +55,29 @@ public class ContactServiceImpl extends GeneralServiceImpl implements
 		
 		pm.close();
 		return c.toClient();
+	}
+
+	public ArrayList<ClientProject> getContactProjects(ClientContact contact) {
+		PersistenceManager pm = PMF.getPersistenceManager();
+		
+		Query query = pm.newQuery(Project.class);
+		query.setFilter("contactKey == ckey");
+		query.declareParameters("com.google.appengine.api.datastore.Key ckey");
+
+		ArrayList<ClientProject> projects = new ArrayList<ClientProject>();
+		
+		try {
+			List<Project> rs = (List<Project>) query.execute(KeyFactory.stringToKey(contact.getId()));
+			for (Project p : rs) {
+				projects.add(p.toClient());
+			}
+		} finally {
+			query.closeAll();
+			pm.close();
+		}
+		
+		
+		return projects;
 	}
 
 }

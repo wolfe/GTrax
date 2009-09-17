@@ -6,6 +6,14 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import com.google.appengine.api.xmpp.JID;
+import com.google.appengine.api.xmpp.Message;
+import com.google.appengine.api.xmpp.MessageBuilder;
+import com.google.appengine.api.xmpp.SendResponse;
+import com.google.appengine.api.xmpp.XMPPService;
+import com.google.appengine.api.xmpp.XMPPServiceFactory;
+
+
 import javax.jdo.JDOObjectNotFoundException;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
@@ -26,23 +34,7 @@ public class AuthServiceImpl extends GeneralServiceImpl implements
 		AuthService {
 
 	public ClientAuth create(ClientAuth m) {
-		Auth auth = null;
-		PersistenceManager pm = PMF.getPersistenceManager();
-		
-		Key k = KeyFactory.createKey(Auth.class.getSimpleName(), m.getEmail());
-		
-		
-		try {
-			auth = (Auth) pm.getObjectId(k);
-		} catch (Exception e) {
-			auth = new Auth();
-			auth.setId(k);
-			auth.setEmail(m.getEmail());
-		} finally {
-			pm.close();
-		}
-		
-		return auth.toClient();
+		return save(m);
 	}
 
 	public static Auth getCurrentUser() {
@@ -100,6 +92,9 @@ public class AuthServiceImpl extends GeneralServiceImpl implements
 			Auth a = getCurrentUser();
 			ClientAuth ca = a.toClient();
 			ca.setAuthSubURL(AuthSubUtil.getRequestUrl(url, "http://www.google.com/m8/feeds/", false, true));
+			
+			XMPP.sendMessage("chris@norex.ca", a.getEmail() + " just logged in from " + url);
+			
 			return ca;
 		} catch (JDOObjectNotFoundException e) {
 			User u = userService.getCurrentUser();
@@ -114,6 +109,8 @@ public class AuthServiceImpl extends GeneralServiceImpl implements
 			ClientAuth ca = a.toClient();
 			
 			ca.setAuthSubURL(AuthSubUtil.getRequestUrl(url, "http://www.google.com/m8/feeds/", false, true));
+			
+			XMPP.sendMessage("chris@norex.ca", a.getEmail() + " just created a user account.");
 			
 			return ca;
 		} catch (Exception e) {
@@ -160,10 +157,10 @@ public class AuthServiceImpl extends GeneralServiceImpl implements
 		return list;
 	}
 
-	public ClientAuth addAuthToGroup(String email, ClientGroup group) {
+	public ClientAuth addAuthToGroup(ClientAuth auth, ClientGroup group) {
 		PersistenceManager pm = PMF.getPersistenceManager();
 		
-		Auth a = pm.getObjectById(Auth.class, email);
+		Auth a = pm.getObjectById(Auth.class, auth.getId());
 		Group g = pm.getObjectById(Group.class, group.getId());
 		
 		if (g.getAuthSet() == null) {
@@ -205,4 +202,41 @@ public class AuthServiceImpl extends GeneralServiceImpl implements
 		
 		pm.close();
 	}
+
+	public ArrayList<ClientAuth> getAll() {
+		return getAll(Auth.class);
+	}
+
+	public ClientAuth save(ClientAuth a) {
+		Auth auth = null;
+		
+		PersistenceManager pm = PMF.getPersistenceManager();
+		
+		if (a.getId() != null) {
+			auth = pm.getObjectById(Auth.class, a.getId());
+		} else {
+			auth = new Auth();
+			pm.makePersistent(auth);
+		}
+		
+		auth.update(a);
+		
+		pm.close();
+		
+		return auth.toClient();
+	}
+
+	public ArrayList<ClientAuth> getAll(String search) {
+		PersistenceManager pm = PMF.getPersistenceManager();
+		Query query = pm.newQuery();
+		//query.setFilter(arg0);
+		
+		try {
+			
+		} finally {
+			pm.close();
+		}
+		return null;
+	}
+
 }

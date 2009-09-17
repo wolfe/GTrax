@@ -22,6 +22,7 @@ import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -30,9 +31,12 @@ import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteHandler;
 import com.google.gwt.user.datepicker.client.DateBox;
 import com.google.gwt.user.datepicker.client.DateBox.Format;
+import com.norex.gtrax.client.AsyncRemoteCall;
 import com.norex.gtrax.client.contact.EmailWidget;
 import com.norex.gtrax.client.contact.WebsiteWidget;
 import com.norex.gtrax.client.contact.PhoneWidget;
+import com.norex.gtrax.client.project.ClientProject;
+
 import java.util.Date;
 
 public class ContactWidget extends Composite {
@@ -89,6 +93,9 @@ public class ContactWidget extends Composite {
 	
 	@UiField
 	DateBox birthday;
+	
+	@UiField
+	VerticalPanel projects;
 	
 	public ContactWidget(final ClientContact contact) {
 		setContact(contact);
@@ -237,6 +244,16 @@ public class ContactWidget extends Composite {
 		birthday.addValueChangeHandler(new ValueChangeHandler<Date>() {
 			public void onValueChange(ValueChangeEvent<Date> event) {
 				getContact().setBirthday(birthday.getValue());
+			}
+		});
+		
+		ContactServiceAsync contactService = GWT.create(ContactService.class);
+		contactService.getContactProjects(getContact(), new AsyncRemoteCall<ArrayList<ClientProject>>() {
+
+			public void onSuccess(ArrayList<ClientProject> result) {
+				for (ClientProject p : result) {
+					projects.add(new Label(p.getName()));
+				}
 			}
 		});
 	}

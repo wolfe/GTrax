@@ -1,5 +1,6 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
-        xmlns:gwt='urn:import:com.google.gwt.user.client.ui'>
+        xmlns:gwt='urn:import:com.google.gwt.user.client.ui'
+        xmlns:gtrax='urn:import:com.norex.gtrax.client'>
         
         <ui:style>
         	.panel {
@@ -21,7 +22,7 @@
 	        		<gwt:DisclosurePanel ui:field="members">
 	        			<gwt:VerticalPanel>
 	        				<gwt:HorizontalPanel>
-	        					<gwt:TextBox ui:field="add" />
+	        					<gtrax:AuthSuggestBox ui:field="add" />
 	        					<gwt:Button ui:field="addButton" text="add" />
 	        				</gwt:HorizontalPanel>
 	        				

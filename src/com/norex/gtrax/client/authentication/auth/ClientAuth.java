@@ -8,6 +8,8 @@ public class ClientAuth extends ClientModel implements AuthInterface, ClientMode
 	protected String id;
 	
 	protected String email;
+	protected String firstname;
+	protected String lastname;
 	
 	protected String authSubToken;
 	protected String authSubURL;
@@ -36,5 +38,25 @@ public class ClientAuth extends ClientModel implements AuthInterface, ClientMode
 	
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	public String getFirstName() {
+		return this.firstname;
+	}
+	public void setFirstName(String name) {
+		this.firstname = name;
+	}
+	public String getLastName() {
+		return this.lastname;
+	}
+	public void setLastName(String name) {
+		this.lastname = name;
+	}
+	
+	public String toString() {
+		if (getFirstName() != null && getLastName() != null) {
+			return getFirstName() + " " + getLastName() + " <" + getEmail() + ">";
+		} else {
+			return getEmail();
+		}
 	}
 }

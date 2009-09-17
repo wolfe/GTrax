@@ -41,6 +41,9 @@
 
 			<gwt:VerticalPanel ui:field="rightCol">
 				<gwt:Image ui:field="contactImage" />
+				
+				<gwt:Label text="Associated Projects" res:styleName="css.nodeLabel" />
+				<gwt:VerticalPanel ui:field="projects" />
 			</gwt:VerticalPanel>
 		</gwt:HorizontalPanel>
 
