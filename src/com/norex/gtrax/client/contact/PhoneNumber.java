@@ -2,9 +2,9 @@ package com.norex.gtrax.client.contact;
 
 import java.io.Serializable;
 
-enum PhoneNumberTypes { home, work, mobile, fax, pager, other }
-
 public class PhoneNumber implements Serializable {
+	public enum PhoneNumberTypes { home, work, mobile, fax, pager, other }
+	
 	private String number;
 	private PhoneNumberTypes type;
 	public String getNumber() {

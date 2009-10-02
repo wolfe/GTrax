@@ -3,120 +3,68 @@ package com.norex.gtrax.client.authentication.group;
 import java.util.ArrayList;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyPressEvent;
-import com.google.gwt.event.dom.client.KeyPressHandler;
-import com.google.gwt.event.logical.shared.CloseHandler;
-import com.google.gwt.event.logical.shared.HasCloseHandlers;
-import com.google.gwt.event.logical.shared.HasOpenHandlers;
-import com.google.gwt.event.logical.shared.OpenEvent;
-import com.google.gwt.event.logical.shared.OpenHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.DecoratorPanel;
-import com.google.gwt.user.client.ui.DisclosurePanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.DecoratedTabPanel;
 import com.norex.gtrax.client.AsyncRemoteCall;
-import com.norex.gtrax.client.AuthSuggestBox;
+import com.norex.gtrax.client.GTrax;
+import com.norex.gtrax.client.HasSaveHandlers;
+import com.norex.gtrax.client.SaveEvent;
+import com.norex.gtrax.client.SaveHandler;
 import com.norex.gtrax.client.authentication.AuthService;
 import com.norex.gtrax.client.authentication.AuthServiceAsync;
-import com.norex.gtrax.client.authentication.auth.AuthWidget;
 import com.norex.gtrax.client.authentication.auth.ClientAuth;
+import com.norex.gtrax.client.contact.ContactServiceAsync;
 
-public class GroupWidget extends Composite implements HasOpenHandlers<DisclosurePanel>, HasCloseHandlers<DisclosurePanel> {
+public class GroupWidget extends Composite implements HasSaveHandlers {
 	
 	private ClientGroup group;
-	AuthServiceAsync authService = GWT.create(AuthService.class);
+	private ArrayList<ClientAuth> groupMembers = new ArrayList<ClientAuth>();
 	
-	interface MyUiBinder extends UiBinder<Widget, GroupWidget> {
-	}
+	DecoratedTabPanel panel = new DecoratedTabPanel();
 	
-	private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
-	
-	
-	@UiField
-	Label name;
-
-	@UiField
-	DisclosurePanel members;
-	
-	@UiField
-	AuthSuggestBox add;
-	
-	@UiField
-	VerticalPanel membersList;
-	
-	@UiField
-	Anchor remove;
+	private GroupOverviewWidget overview;
+	private GroupMembersWidget members;
+	private GroupPermissionsWidget permissions;
 	
 	public GroupWidget(ClientGroup group) {
+		initWidget(panel);
 		setGroup(group);
 		
-		initWidget(uiBinder.createAndBindUi(this));
+		overview = new GroupOverviewWidget(this);
+		members = new GroupMembersWidget(this);
+		permissions = new GroupPermissionsWidget(this);
 		
-		name.setText(getGroup().getName());
-		updateMembersHeader();
+		panel.add(overview, "Overview");
+		panel.add(members, "Group Members");
+		panel.add(permissions, "Group Permissions");
+		panel.setWidth("100%");
+		panel.selectTab(0);
 		
-		members.addOpenHandler(new OpenHandler<DisclosurePanel>() {
-			
-			@Override
-			public void onOpen(OpenEvent<DisclosurePanel> event) {
-				add.setFocus(true);
-				getGroupMembers();
-			}
-		});
-		
-		final GroupWidget w = this;
-		remove.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				if (!Window.confirm("Do you really want to delete this group?")) return;
-				
-				authService.deleteGroup(getGroup(), new AsyncRemoteCall() {
-					public void onSuccess(Object result) {
-						w.removeFromParent();
+		this.addSaveHandler(new SaveHandler() {
+			public void onSave(SaveEvent event) {
+				getGroup().setName(overview.name.getValue());
+				AuthServiceAsync authService = GWT.create(AuthService.class);
+				authService.saveGroup(getGroup(), new AsyncRemoteCall<ClientGroup>() {
+					public void onSuccess(ClientGroup result) {
+						setGroup(result);
+						triggerSubWidgetUpdate();
 					}
 				});
 			}
 		});
-	}
-	
-	@UiHandler("addButton")
-	public void doAddButton(ClickEvent event) {
-		doAddButton();
-	}
-	
-	public void doAddButton() {
-		authService.addAuthToGroup(add.getAuthValue(), getGroup(), new AsyncRemoteCall<ClientAuth>() {
-			public void onSuccess(ClientAuth result) {
-				add.setValue(null);
-				getGroup().getAuthSet().add(result.getId());
-				updateMembersHeader();
-				getGroupMembers();
-			}
-		});
-	}
-	
-	public void updateMembersHeader() {
-		members.setHeader(new Anchor(getGroup().getAuthSet().toArray().length + " members (click to expand)"));
-	}
-	
-	public void getGroupMembers() {
+		
+		AuthServiceAsync authService = GWT.create(AuthService.class);
 		authService.getGroupMembers(getGroup(), new AsyncRemoteCall<ArrayList<ClientAuth>>() {
 			public void onSuccess(ArrayList<ClientAuth> result) {
-				membersList.clear();
 				for (ClientAuth a : result) {
-					membersList.add(new AuthWidget(a));
+					if (a.getEmail().equals(GTrax.getAuth().getEmail())) {
+						GTrax.setAuth(a);
+					}
 				}
+				setGroupMembers(result);
+				members.update();
 			}
 		});
 	}
@@ -125,23 +73,27 @@ public class GroupWidget extends Composite implements HasOpenHandlers<Disclosure
 		this.group = group;
 	}
 
+	private void triggerSubWidgetUpdate() {
+		if (overview != null) {
+			overview.update();
+		}
+	}
+	
 	public ClientGroup getGroup() {
 		return group;
 	}
 
-	public HandlerRegistration addOpenHandler(
-			OpenHandler<DisclosurePanel> handler) {
-		
-		return members.addOpenHandler(handler);
+	public HandlerRegistration addSaveHandler(SaveHandler handler) {
+		return this.addHandler(handler, SaveEvent.getType());
 	}
 
-	public HandlerRegistration addCloseHandler(
-			CloseHandler<DisclosurePanel> handler) {
-		return members.addCloseHandler(handler);
+	public void setGroupMembers(ArrayList<ClientAuth> groupMembers) {
+		this.groupMembers = groupMembers;
+	}
+
+	public ArrayList<ClientAuth> getGroupMembers() {
+		return groupMembers;
 	}
 	
-	public void setOpen(boolean isOpen) {
-		members.setOpen(isOpen);
-	}
-	
+
 }

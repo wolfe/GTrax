@@ -81,10 +81,10 @@ public class AuthServiceImpl extends GeneralServiceImpl implements
 	}
 
 	public ClientAuth login(String url) throws NotLoggedInException {
+		Permission.setUpPermissions();
+		
 		UserService userService = UserServiceFactory.getUserService();
 
-		PersistenceManager pm = PMF.getPersistenceManager();
-		
 		try {
 			@SuppressWarnings("unused")
 			User user = userService.getCurrentUser();
@@ -97,6 +97,8 @@ public class AuthServiceImpl extends GeneralServiceImpl implements
 			
 			return ca;
 		} catch (JDOObjectNotFoundException e) {
+			PersistenceManager pm = PMF.getPersistenceManager();
+			
 			User u = userService.getCurrentUser();
 			
 			Key k = KeyFactory.createKey(Auth.class.getSimpleName(), u.getEmail());
@@ -105,6 +107,7 @@ public class AuthServiceImpl extends GeneralServiceImpl implements
 			a.setEmail(u.getEmail());
 			pm.makePersistent(a);
 			
+			pm.close();
 			
 			ClientAuth ca = a.toClient();
 			
@@ -117,18 +120,21 @@ public class AuthServiceImpl extends GeneralServiceImpl implements
 			NotLoggedInException nli = new NotLoggedInException();
 			nli.setLoginURL(userService.createLoginURL(url));
 			throw nli;
-		} finally {
-			pm.close();
 		}
 	}
 
-	public ClientGroup createGroup(ClientGroup group) {
+	public ClientGroup saveGroup(ClientGroup group) {
 		PersistenceManager pm = PMF.getPersistenceManager();
 		
-		Group g = new Group();
-		g.update(group);
+		Group g;
 		
-		pm.makePersistent(g);
+		if (group.getId() == null) {
+			g = new Group();
+			pm.makePersistent(g);
+		} else {
+			g = pm.getObjectById(Group.class, group.getId());
+		}
+		g.update(group);
 		
 		pm.close();
 		
@@ -167,7 +173,10 @@ public class AuthServiceImpl extends GeneralServiceImpl implements
 			g.setAuthSet(new HashSet<Key>());
 		}
 		
+		if (a.getGroupSet() == null) a.setGroupSet(new HashSet<Key>());
+		
 		g.getAuthSet().add(a.getId());
+		a.getGroupSet().add(g.getId());
 		
 		pm.close();
 		
@@ -237,6 +246,28 @@ public class AuthServiceImpl extends GeneralServiceImpl implements
 			pm.close();
 		}
 		return null;
+	}
+
+	public ArrayList<String> getAllPermissions() {
+		PersistenceManager pm = PMF.getPersistenceManager();
+		
+		Query query = pm.newQuery(Permission.class);
+		
+		ArrayList<String> list = new ArrayList<String>();
+		
+		try {
+			List<Permission> results = (List<Permission>) query.execute();
+			if (!results.iterator().hasNext()) return null;
+			
+			for (Permission g : results) {
+				list.add(g.getId().getName());
+			}
+		} finally {
+			query.closeAll();
+			pm.close();
+		}
+		
+		return list;
 	}
 
 }

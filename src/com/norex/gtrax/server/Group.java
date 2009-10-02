@@ -1,6 +1,7 @@
 package com.norex.gtrax.server;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -28,6 +29,9 @@ public class Group extends Model implements GroupInterface<Key> {
 	
 	@Persistent
 	private Set<Key> authSet = new HashSet<Key>();
+	
+	@Persistent
+	private Set<Key> permissionSet = new HashSet<Key>();
 
 	public Key getId() {
 		return id;
@@ -57,9 +61,18 @@ public class Group extends Model implements GroupInterface<Key> {
 		this.setName(cg.getName());
 		this.setDescription(cg.getDescription());
 		
-		this.getAuthSet().clear();
+		if (getAuthSet() == null) {
+			setAuthSet(new HashSet<Key>());
+		}
+		
+		getAuthSet().clear();
 		for (String s : cg.getAuthSet()) {
 			this.getAuthSet().add(KeyFactory.stringToKey(s));
+		}
+		
+		getPermissionSet().clear();
+		for (String s : cg.getPermSet()) {
+			this.getPermissionSet().add(KeyFactory.createKey(Permission.class.getSimpleName(), s));
 		}
 	}
 	
@@ -77,6 +90,10 @@ public class Group extends Model implements GroupInterface<Key> {
 			cg.setAuthSet(new HashSet<String>());
 		}
 		
+		for (Key k : getPermissionSet()) {
+			cg.getPermSet().add(k.getName());
+		}
+		
 		return cg;
 	}
 
@@ -86,5 +103,14 @@ public class Group extends Model implements GroupInterface<Key> {
 
 	public void setDescription(String desc) {
 		this.description = desc;
+	}
+
+	public void setPermissionSet(Set<Key> permissionSet) {
+		this.permissionSet = permissionSet;
+	}
+
+	public Set<Key> getPermissionSet() {
+		if (permissionSet == null) permissionSet = new HashSet<Key>();
+		return permissionSet;
 	}
 }

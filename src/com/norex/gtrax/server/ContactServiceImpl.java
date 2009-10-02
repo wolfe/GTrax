@@ -6,12 +6,24 @@ import java.util.List;
 import javax.jdo.PersistenceManager;
 
 import com.google.appengine.api.datastore.KeyFactory;
-import com.norex.gtrax.client.authentication.NotLoggedInException;
-import com.norex.gtrax.client.authentication.auth.ClientAuth;
+import com.google.gdata.data.contacts.ContactEntry;
+import com.google.gdata.data.extensions.Email;
+import com.google.gdata.data.extensions.FullName;
+import com.google.gdata.data.extensions.Name;
+import com.google.gdata.util.AuthenticationException;
+import com.google.gdata.util.ServiceException;
 import com.norex.gtrax.client.contact.ClientContact;
 import com.norex.gtrax.client.contact.ContactService;
+import com.norex.gtrax.client.contact.EmailAddress;
+import com.norex.gtrax.client.contact.EmailAddress.EmailAddressType;
 import com.norex.gtrax.client.project.ClientProject;
+import com.google.gdata.client.contacts.*;
+import com.google.gdata.client.http.AuthSubUtil;
+import com.google.gdata.client.http.GoogleGDataRequest;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import javax.jdo.Query;
 
 
@@ -41,7 +53,8 @@ public class ContactServiceImpl extends GeneralServiceImpl implements
 
 	public ClientContact save(ClientContact contact) {
 		Contact c = null;
-
+		
+		
 		PersistenceManager pm = PMF.getPersistenceManager();
 		
 		if (contact.getId() != null) {
@@ -58,6 +71,8 @@ public class ContactServiceImpl extends GeneralServiceImpl implements
 	}
 
 	public ArrayList<ClientProject> getContactProjects(ClientContact contact) {
+		if (contact.getId() == null) return null;
+		
 		PersistenceManager pm = PMF.getPersistenceManager();
 		
 		Query query = pm.newQuery(Project.class);

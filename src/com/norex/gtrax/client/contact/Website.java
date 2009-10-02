@@ -2,9 +2,9 @@ package com.norex.gtrax.client.contact;
 
 import java.io.Serializable;
 
-enum WebsiteType { home, work, blog, profile, other }
-
 public class Website implements Serializable {
+	
+	public enum WebsiteType { home, work, blog, profile, other }
 
 	private String address;
 	private WebsiteType type;

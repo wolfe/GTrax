@@ -2,10 +2,10 @@ package com.norex.gtrax.client.contact;
 
 import java.io.Serializable;
 
-enum EmailAddressType { home, work, other }
-
 public class EmailAddress implements Serializable {
 
+	public enum EmailAddressType { home, work, other }
+	
 	private String address;
 	private EmailAddressType type;
 	

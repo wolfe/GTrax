@@ -16,9 +16,11 @@ public interface AuthServiceAsync {
 	public void exchangeAuthSubToken(String token, AsyncCallback<ClientAuth> async);
 	public void login(String url, AsyncCallback<ClientAuth> async);
 	
-	public void createGroup(ClientGroup group, AsyncCallback<ClientGroup> async);
+	public void saveGroup(ClientGroup group, AsyncCallback<ClientGroup> async);
 	public void getGroups(AsyncCallback<ArrayList<ClientGroup>> async);
 	public void addAuthToGroup(ClientAuth auth, ClientGroup group, AsyncCallback<ClientAuth> async);
 	public void getGroupMembers(ClientGroup group, AsyncCallback<ArrayList<ClientAuth>> async);
 	public void deleteGroup(ClientGroup group, AsyncCallback async);
+	
+	public void getAllPermissions(AsyncCallback<ArrayList<String>> async);
 }

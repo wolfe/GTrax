@@ -3,6 +3,7 @@ package com.norex.gtrax.server;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.jdo.PersistenceManager;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
@@ -35,7 +36,7 @@ public class Auth extends Model implements AuthInterface {
 	private String authSubToken;
 	
 	@Persistent 
-	private Set<Key> groupSet = new HashSet<Key>();
+	private Set<Key> groupMembershipSet;
 
 	public Key getId() {
 		return id;
@@ -45,12 +46,15 @@ public class Auth extends Model implements AuthInterface {
 		this.id = id;
 	}
 	
-	public void setGroupSet(Set<Key> groupSet) {
-		this.groupSet = groupSet;
+	public void setGroupSet(HashSet<Key> groupSet) {
+		this.groupMembershipSet = groupSet;
 	}
 
 	public Set<Key> getGroupSet() {
-		return groupSet;
+		if (groupMembershipSet == null) {
+			groupMembershipSet = new HashSet<Key>();
+		}
+		return groupMembershipSet;
 	}
 
 	public void setEmail(String email) {
@@ -77,6 +81,20 @@ public class Auth extends Model implements AuthInterface {
 		tmp.setFirstName(getFirstName());
 		tmp.setLastName(getLastName());
 		tmp.setAuthSubToken(this.getAuthSubToken());
+		
+		PersistenceManager pm = PMF.getPersistenceManager();
+		Auth a = pm.getObjectById(Auth.class, getId());
+		Set<Key> groupSet = a.getGroupSet();
+		pm.close();
+		
+		for (Key groupKey : groupSet) {
+			PersistenceManager pmf = PMF.getPersistenceManager();
+			Group g = pmf.getObjectById(Group.class, groupKey);
+			for (Key k : g.getPermissionSet()) {
+				tmp.getPerms().add(k.getName());
+			}
+			pmf.close();
+		}
 		
 		return tmp;
 		

@@ -15,6 +15,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
+import com.norex.gtrax.client.contact.Website.WebsiteType;
 
 public class WebsiteWidget extends Composite implements HasWidgets {
 	private Website website;

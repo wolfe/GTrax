@@ -22,7 +22,6 @@
 			}
 		</ui:style>
 
-	<gwt:DecoratorPanel>
 		<gwt:VerticalPanel width="100%">
 			<gwt:HorizontalPanel width="100%">
 				<gwt:TextBox ui:field="name" />
@@ -38,10 +37,6 @@
 				<gwt:CheckBox ui:field="status" />
 			</gwt:HorizontalPanel>
 			
-			<gwt:HorizontalPanel ui:field="addauthcontainer">
-				<gwt:Label text="Add user to this project: (email address)" />
-			</gwt:HorizontalPanel>
 		</gwt:VerticalPanel>
-	</gwt:DecoratorPanel>
 
 </gwt:UiBinder> 

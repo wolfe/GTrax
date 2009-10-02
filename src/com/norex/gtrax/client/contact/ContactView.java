@@ -19,6 +19,8 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.norex.gtrax.client.AsyncRemoteCall;
+import com.norex.gtrax.client.SaveEvent;
+import com.norex.gtrax.client.SaveHandler;
 import com.norex.gtrax.client.ViewInterface;
 import com.norex.gtrax.client.contact.ContactWidget;
 
@@ -136,19 +138,18 @@ public class ContactView implements ViewInterface {
 		right.add(head);
 		right.add(widget);
 		
+		widget.addSaveHandler(new SaveHandler() {
+			public void onSave(SaveEvent event) {
+				ClientContact c = widget.getContact();
+				contactsMap.put(c.getId(), c);
+				right.clear();
+				buildList();
+			}
+		});
+		
 		save.addClickHandler(new ClickHandler() {
-			
-			@Override
 			public void onClick(ClickEvent event) {
-				contactService.save(widget.getContact(), new AsyncRemoteCall<ClientContact>() {
-					public void onSuccess(ClientContact result) {
-						contactsMap.put(result.getId(), result);
-						widget.setContact(result);
-						right.clear();
-						
-						buildList();
-					}
-				});
+				widget.fireEvent(new SaveEvent());
 			}
 		});
 		
@@ -174,5 +175,10 @@ public class ContactView implements ViewInterface {
 				buildList();
 			}
 		});
+	}
+
+	public void fireSubHistory(String subItem) {
+		// TODO Auto-generated method stub
+		
 	}
 }

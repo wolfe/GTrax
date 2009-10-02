@@ -12,6 +12,7 @@ public class ClientGroup extends ClientModel implements GroupInterface<String>, 
 	private String name;
 	private String desc;
 	private Set<String> authSet = new HashSet<String>();
+	private Set<String> permSet = new HashSet<String>();
 	
 	public void setId(String id) {
 		this.id = id;
@@ -43,6 +44,14 @@ public class ClientGroup extends ClientModel implements GroupInterface<String>, 
 
 	public void setAuthSet(Set<String> set) {
 		this.authSet = set;
+	}
+
+	public void setPermSet(Set<String> permSet) {
+		this.permSet = permSet;
+	}
+
+	public Set<String> getPermSet() {
+		return permSet;
 	}
 
 }

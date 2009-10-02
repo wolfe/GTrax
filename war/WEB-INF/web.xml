@@ -5,11 +5,6 @@
 
 <web-app>
   
-  <!-- Default page to serve -->
-  <welcome-file-list>
-    <welcome-file>index.html</welcome-file>
-  </welcome-file-list>
-  
   <servlet>
     <servlet-name>AuthServiceImpl</servlet-name>
     <servlet-class>com.norex.gtrax.server.AuthServiceImpl</servlet-class>
@@ -58,6 +53,9 @@
   <servlet-name>blobRenderServlet</servlet-name>
   <url-pattern>/gtrax/blobrender</url-pattern>
 </servlet-mapping>
-  
+  <!-- Default page to serve -->
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+  </welcome-file-list>
   
 </web-app>

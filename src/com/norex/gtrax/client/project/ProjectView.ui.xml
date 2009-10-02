@@ -1,8 +1,12 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
         xmlns:gwt='urn:import:com.google.gwt.user.client.ui'>
 
+	<gwt:HorizontalPanel width="100%">
+		<gwt:VerticalPanel ui:field="projectsList" width="100%">
+		
+		</gwt:VerticalPanel>
         <gwt:VerticalPanel width="100%">
-        	<gwt:HorizontalPanel>
+        	<gwt:HorizontalPanel ui:field="createNew">
         		<gwt:TextBox ui:field="newProjectName" />
         		<gwt:ListBox ui:field="newProjectContact" />
         		<gwt:Button ui:field="addNewProject" text="add new project" />
@@ -10,5 +14,6 @@
         	
         	<gwt:FlowPanel ui:field="projectsContainer" />
         </gwt:VerticalPanel>
+    </gwt:HorizontalPanel>
         
 </ui:UiBinder>

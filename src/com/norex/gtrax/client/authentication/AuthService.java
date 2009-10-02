@@ -19,9 +19,11 @@ public interface AuthService extends RemoteService {
 	public ClientAuth exchangeAuthSubToken(String token);
 	public ClientAuth login(String url) throws NotLoggedInException;
 	
-	public ClientGroup createGroup(ClientGroup group);
+	public ClientGroup saveGroup(ClientGroup group);
 	public ArrayList<ClientGroup> getGroups();
 	public ClientAuth addAuthToGroup(ClientAuth auth, ClientGroup group);
 	public ArrayList<ClientAuth> getGroupMembers(ClientGroup group);
 	public void deleteGroup(ClientGroup group);
+	
+	public ArrayList<String> getAllPermissions();
 }

@@ -3,11 +3,9 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.launching.macosx.MacOSXType/JVM 1.6.0 (MacOS X Default)"/>
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER/GWT 2.0.0 Trunk"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-fileupload-1.2.1-sources.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-fileupload-1.2.1.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-io-1.4.jar"/>
-	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER/Java Appengine Runtime - Trunk"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/gdata-analytics-2.0.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/gdata-analytics-2.0.jar" sourcepath="/Users/mini/Downloads/gdata/java/src"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gdata-analytics-meta-2.0.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gdata-appsforyourdomain-1.0.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gdata-appsforyourdomain-meta-1.0.jar"/>
@@ -22,7 +20,7 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gdata-client-meta-1.0.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gdata-codesearch-2.0.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gdata-codesearch-meta-2.0.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/gdata-contacts-3.0.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/gdata-contacts-3.0.jar" sourcepath="/Users/mini/Downloads/gdata/java/src"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gdata-contacts-meta-3.0.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gdata-core-1.0.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gdata-docs-3.0.jar"/>
@@ -43,5 +41,7 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gdata-youtube-2.0.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gdata-youtube-meta-2.0.jar"/>
 	<classpathentry kind="lib" path="/Users/mini/Documents/workspace/google-web-toolkit-read-only/build/lib/gwt-user.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/google-collect-1.0-rc2.jar"/>
+	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER/App Engine (2)"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

@@ -1,5 +1,8 @@
 package com.norex.gtrax.client.authentication.auth;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.norex.gtrax.client.ClientModel;
 import com.norex.gtrax.client.ClientModelInterface;
 import com.norex.gtrax.client.authentication.AuthInterface;
@@ -13,6 +16,8 @@ public class ClientAuth extends ClientModel implements AuthInterface, ClientMode
 	
 	protected String authSubToken;
 	protected String authSubURL;
+	
+	private Set<String> perms = new HashSet<String>();
 	
 	public String getId() {
 		return id;
@@ -58,5 +63,15 @@ public class ClientAuth extends ClientModel implements AuthInterface, ClientMode
 		} else {
 			return getEmail();
 		}
+	}
+	public void setPerms(Set<String> perms) {
+		this.perms = perms;
+	}
+	public Set<String> getPerms() {
+		return perms;
+	}
+	
+	public boolean hasPerm(String perm) {
+		return getPerms().contains(perm);
 	}
 }

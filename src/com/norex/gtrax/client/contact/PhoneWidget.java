@@ -15,6 +15,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
+import com.norex.gtrax.client.contact.PhoneNumber.PhoneNumberTypes;
 
 public class PhoneWidget extends Composite implements HasWidgets {
 	private PhoneNumber phonenumber;

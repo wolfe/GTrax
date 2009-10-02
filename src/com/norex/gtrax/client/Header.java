@@ -33,6 +33,7 @@ import com.norex.gtrax.client.authentication.auth.ClientAuth;
 import com.norex.gtrax.client.authentication.group.GroupView;
 import com.norex.gtrax.client.contact.ContactView;
 import com.norex.gtrax.client.project.ProjectView;
+import com.norex.gtrax.client.timesheet.TimesheetView;
 
 public class Header {
 	
@@ -136,8 +137,19 @@ public class Header {
 		
 		this.historyHandler = new ValueChangeHandler<String>() {
 		    public void onValueChange(final ValueChangeEvent<String> event) {
+		    	String val = event.getValue();
+		    	String viewName;
+		    	String subItem = null;
+		    	if (val.contains("/")) {
+		    		String[] arr = val.split("/");
+		    		viewName = arr[0];
+		    		subItem = arr[1];
+		    	} else {
+		    		viewName = val;
+		    	}
+		    	
 		    	RootPanel.get("content").clear();
-				Hyperlink item = itemTokens.get(event.getValue());
+				Hyperlink item = itemTokens.get(viewName);
 				if (item == null) {
 					return;
 				}
@@ -152,6 +164,9 @@ public class Header {
 					RootPanel.get("content").add(view);
 				}
 				
+				if (subItem != null) {
+					i.fireSubHistory(subItem);
+				}
 		    }
 		};
 		
@@ -172,11 +187,14 @@ public class Header {
     }
     
     public void doSuccessfulLogin(ClientAuth result) {
+    	GTrax.setAuth(result);
+    	
     	login.add(new Label("Logged in as " + result.getEmail()));
 		
 		addViewInterface("Contacts", new ContactView());
 		addViewInterface("Groups", new GroupView());
 		addViewInterface("Projects", new ProjectView());
+		addViewInterface("Timesheet", new TimesheetView());
 		
 		History.fireCurrentHistoryState();
     }
@@ -192,8 +210,12 @@ public class Header {
 		this.addMenuItem(widget);
     }
 
-    private String getWidgetToken(ViewInterface cls) {
-		String className = cls.getClass().getName();
+    public static String getWidgetToken(ViewInterface cls) {
+		return Header.getWidgetToken(cls.getClass());
+    }
+    
+    public static String getWidgetToken(Class cls) {
+    	String className = cls.getName();
 		className = className.substring(className.lastIndexOf('.') + 1);
 		return className;
     }
@@ -208,5 +230,10 @@ public class Header {
 
     public void addItem(Widget item) {
     	header.add(item, DockPanel.WEST);
+    }
+    
+    public ViewInterface getViewInstance(String type) {
+    	Hyperlink item = itemTokens.get(type);
+    	return itemWidgets.get(item);
     }
 }
