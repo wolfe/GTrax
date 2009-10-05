@@ -58,7 +58,11 @@ public class Header {
 			
 			@Resource("logo.png")
 			AbstractImagePrototype logo();
+			
+			@Resource("norexLogo.png")
+			AbstractImagePrototype norexLogo();
 		}
+		
 	}
 	
     /**
