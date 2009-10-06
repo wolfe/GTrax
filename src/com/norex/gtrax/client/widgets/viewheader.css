@@ -1,0 +1,14 @@
+.headerContainer {
+	width: 100%;
+	padding: 6px 10px 6px 10px;
+	background-color: #ddd;
+}
+
+.widgetContainer {
+	float: left;
+	margin-right: 10px;
+}
+
+.clearElement {
+	clear: both;
+}

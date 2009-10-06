@@ -30,6 +30,9 @@ import com.norex.gtrax.client.SaveHandler;
 import com.norex.gtrax.client.ViewInterface;
 import com.norex.gtrax.client.authentication.AuthService;
 import com.norex.gtrax.client.authentication.AuthServiceAsync;
+import com.norex.gtrax.client.widgets.SideSelectorColumn;
+import com.norex.gtrax.client.widgets.ViewHeader;
+import com.norex.gtrax.client.widgets.SideSelectorColumn.SideSelectColumnItem;
 
 public class GroupView implements ViewInterface {
 	
@@ -51,10 +54,24 @@ public class GroupView implements ViewInterface {
 //	@UiField
 //	VerticalPanel groupsList;
 	
+	@UiField
+	ViewHeader container;
+	
+	@UiField
+	SideSelectorColumn selectorColumn;
+	
 	public Panel getView() {
 		//updateFromDataSource();
 		
 		Panel p = uiBinder.createAndBindUi(this);
+		
+		SideSelectorColumn.SideSelectColumnItem i = selectorColumn.new SideSelectColumnItem();
+		i.setText("All Users");
+		selectorColumn.setColumnHeader(i);
+		
+		SideSelectorColumn.SideSelectColumnItem w = selectorColumn.new SideSelectColumnItem();
+		w.setText("Groups");
+		selectorColumn.add(w);
 		
 //		newGroupName.addKeyPressHandler(new KeyPressHandler() {
 //			public void onKeyPress(KeyPressEvent event) {
@@ -65,6 +82,23 @@ public class GroupView implements ViewInterface {
 //		});
 		
 		return p;
+	}
+	
+	@UiHandler("addUserButton")
+	public void doAddUserButton(ClickEvent click) {
+		doAddUserButton();
+	}
+	
+	public void doAddUserButton() {
+		container.clear();
+	}
+	
+	@UiHandler("addGroupButton")
+	public void doAddGroupButton(ClickEvent click) {
+		doAddGroupButton();
+	}
+	
+	public void doAddGroupButton() {
 	}
 //
 //	@UiHandler("addNewGroup")

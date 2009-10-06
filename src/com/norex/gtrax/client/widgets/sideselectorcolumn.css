@@ -1,0 +1,21 @@
+.column {
+	width: 200px;
+	padding: 10px;
+}
+
+.columnHeader {
+	border-bottom: 1px solid #000;
+}
+
+.columnContainer {
+	
+}
+
+.selectorItem {
+	margin-bottom: 4px;
+	cursor: pointer;
+}
+
+.selectorItem-selected {
+	font-weight: bold;
+}
