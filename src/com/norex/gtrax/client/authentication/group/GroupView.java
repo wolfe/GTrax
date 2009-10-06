@@ -72,6 +72,11 @@ public class GroupView implements ViewInterface {
 		SideSelectorColumn.SideSelectColumnItem w = selectorColumn.new SideSelectColumnItem();
 		w.setText("Groups");
 		selectorColumn.add(w);
+		w.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				Window.alert("sdfsdf");
+			}
+		});
 		
 //		newGroupName.addKeyPressHandler(new KeyPressHandler() {
 //			public void onKeyPress(KeyPressEvent event) {
