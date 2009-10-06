@@ -194,11 +194,11 @@ public class Header {
     	GTrax.setAuth(result);
     	
     	login.add(new Label("Logged in as " + result.getEmail()));
-		
-		addViewInterface("Contacts", new ContactView());
-		addViewInterface("Groups", new GroupView());
-		addViewInterface("Projects", new ProjectView());
-		addViewInterface("Timesheet", new TimesheetView());
+
+    	addViewInterface("Users/Groups", new GroupView());
+		addViewInterface("CRM", new ContactView());
+		addViewInterface("PM", new ProjectView());
+		addViewInterface("Time Tracker", new TimesheetView());
 		
 		History.fireCurrentHistoryState();
     }

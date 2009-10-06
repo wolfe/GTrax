@@ -1,16 +1,22 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
         xmlns:gwt='urn:import:com.google.gwt.user.client.ui'>
+        
+        <gwt:FlowPanel width="100%">
+        	<gwt:FlowPanel ui:field="header">
+        		<gwt:Label text="Hello"></gwt:Label>
+        	</gwt:FlowPanel>
+        </gwt:FlowPanel>
 
-		<gwt:HorizontalPanel width="100%">
-		<gwt:VerticalPanel ui:field="groupsList">
-		</gwt:VerticalPanel>
-        <gwt:VerticalPanel width="100%">
-        	<gwt:HorizontalPanel>
-        		<gwt:TextBox ui:field="newGroupName" />
-        		<gwt:Button ui:field="addNewGroup" text="add new group" />
-        	</gwt:HorizontalPanel>
-        	
-        	<gwt:FlowPanel ui:field="groupsContainer"  width="100%" />
-        </gwt:VerticalPanel>
-        </gwt:HorizontalPanel>
+<!--		<gwt:HorizontalPanel width="100%">-->
+<!--		<gwt:VerticalPanel ui:field="groupsList">-->
+<!--		</gwt:VerticalPanel>-->
+<!--        <gwt:VerticalPanel width="100%">-->
+<!--        	<gwt:HorizontalPanel>-->
+<!--        		<gwt:TextBox ui:field="newGroupName" />-->
+<!--        		<gwt:Button ui:field="addNewGroup" text="add new group" />-->
+<!--        	</gwt:HorizontalPanel>-->
+<!--        	-->
+<!--        	<gwt:FlowPanel ui:field="groupsContainer"  width="100%" />-->
+<!--        </gwt:VerticalPanel>-->
+<!--        </gwt:HorizontalPanel>-->
 </ui:UiBinder>
